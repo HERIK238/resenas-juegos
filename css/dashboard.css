@@ -1,0 +1,145 @@
+/* --- ESTILOS DE LA BARRA DE NAVEGACIÓN --- */
+.navbar {
+    background-color: #072B73;
+}
+
+.navbar-brand, .nav-link {
+    color: #FFFFFF;
+}
+
+.navbar-brand:hover {
+    color: #8C030E;
+}
+
+.navbar-nav .nav-link.active {
+    color: #FFFFFF;
+}
+
+.navbar-nav .nav-link.active:hover {
+    color: #8C030E;
+}
+
+.btn-outline-success {
+    color: #F20519;
+    border-color: #F20519;
+}
+
+.btn-outline-success:hover {
+    background-color: #F20519;
+    color: white;
+}
+
+.nav-link:hover {
+    color: #8C030E;
+}
+
+/* --- BOTÓN FLOTANTE (+) --- */
+.btn-pri {
+    background-color: #F20519;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    transition: 0.3s;
+}
+
+.btn-pri:hover {
+    background-color: #8C030E;
+    color: white;
+    opacity: 1;
+}
+
+/* --- CUERPO Y FONDO --- */
+body {
+    background: linear-gradient(180deg, #072B73 0%, #094A73 50%, #15A0BF 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* --- BUSCADOR CENTRADO --- */
+.navbar-collapse form[role="search"] {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 350px;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse form[role="search"] {
+        position: static;
+        transform: none;
+        margin: 10px 0;
+        max-width: 100%;
+    }
+}
+
+/* --- MODAL PERSONALIZADO (MANUAL) --- */
+
+/* 1. Fondo oscuro detrás del modal */
+.custom-modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75); /* Oscurece el fondo */
+    z-index: 2000 ; /* Centra horizontalmente */     
+    align-items: center;
+    justify-content: center;
+}
+
+/* Clase que activa el JS */
+.custom-modal.show {
+    display: flex ; /* Centra horizontalmente */    
+}
+
+/* 2. El "Marco" que define el ANCHO del modal */
+.custom-modal .modal-dialog {
+    width: 500px ;    /* AQUÍ CAMBIAS EL ANCHO (ej: 1000px) */
+    max-width: 95% ;  /* Para que no se rompa en móviles */
+    margin: 0 auto ; /* Centra horizontalmente */   
+}
+
+/* 3. La caja blanca con el contenido */
+.custom-modal .modal-content {
+    background-color: white ; /* Centra horizontalmente */  
+    color: #333 ; /* Centra horizontalmente */  
+    padding: 25px ; /* Centra horizontalmente */    
+    border-radius: 12px;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.6);
+    min-height: 400px ; /* Centra horizontalmente */
+    width: 100% ; /* Centra horizontalmente */        /* Usa todo el ancho del dialog */
+    max-width: none ; /* Centra horizontalmente */    /* Desbloquea el límite de 500px */
+    border: none;
+}
+
+/* Estilos internos para que los textos y botones se vean bien */
+.custom-modal .modal-header, 
+.custom-modal .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding-bottom: 15px;
+}
+
+.custom-modal .modal-title {
+    color: #072B73;
+    font-weight: bold;
+}
+
+.custom-modal .modal-body {
+    padding: 20px 0;
+    font-size: 16px;
+}
