@@ -1,8 +1,6 @@
 <?php
-// Requiere el modelo
 require_once __DIR__ . '/../models/UserAuth.php';
 
-// Clase AuthService
 class AuthService {
     private $userModel;
 
@@ -10,24 +8,19 @@ class AuthService {
         $this->userModel = new User();
     }
 
-    // Autentica un usuario
     public function authenticate($input, $password) {
         $user = $this->userModel->findByCredentials($input);
         
         if (!$user || !password_verify($password, $user['password'])) {
-            return [
-                'status' => 'error',
-                'message' => 'Credenciales incorrectas'
-            ];
+            return ['status' => 'error', 'message' => 'Credenciales incorrectas'];
         }
 
-        // Iniciar sesión
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) { session_start(); }
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];
-        $_SESSION['rol'] = $user['rol'];
+        $_SESSION['rol'] = $user['role_id'];
 
         return [
             'status' => 'success',

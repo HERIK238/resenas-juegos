@@ -1,42 +1,15 @@
 <?php
-// Requiere el modelo
-require_once __DIR__ . '/../models/ModalAuth.php';
+require_once __DIR__ . '/../models/UserList.php';
 
-// Clase UserService
-class UserService {
+class UserListService {
     private $userModel;
 
-    public function __construct(User $userModel) {
-        $this->userModel = $userModel;
+    public function __construct() {
+        $this->userModel = new UserList();
     }
 
-    // Crea un nuevo usuario
-    public function createUser($username, $email, $status, $password, $role, $documento) {
-        // Encripta la contraseña
-        $hash = password_hash($password, PASSWORD_BCRYPT);
-
-        // Llama al modelo para guardar
-        $nuevoId = $this->userModel->insertUser([
-            'username' => $username,
-            'documento' => $documento,
-            'email'    => $email,
-            'estado'   => $status,
-            'password' => $hash,
-            'rol'      => $role
-        ]);
-
-        if (!$nuevoId) {
-            return [
-                'status'  => 'error',
-                'message' => 'No se pudo crear el usuario'
-            ];
-        }
-
-        return [
-            'status'  => 'success',
-            'message' => 'Usuario creado correctamente',
-            'user_id' => $nuevoId
-        ];
+    public function listUsers() {
+        return $this->userModel->getAllUsers();
     }
 }
 ?>

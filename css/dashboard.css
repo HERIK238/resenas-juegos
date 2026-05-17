@@ -143,3 +143,23 @@ body {
     padding: 20px 0;
     font-size: 16px;
 }
+
+/* --- Bubble Design --- */
+.bubble {
+    background-color: #333333;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none; /* Evita que el texto se resalte por accidente */
+}
+
+/* El estilo cuando le dan clic (Seleccionada) */
+.bubble.selected {
+    background-color: #F20519; /* Color rojo */
+    font-weight: bold;
+    transform: scale(1.1); /* Efecto de que se hace un poquito más grande */
+    box-shadow: 0 4px 15px rgba(242, 5, 25, 0.5);
+}
