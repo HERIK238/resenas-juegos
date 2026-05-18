@@ -1,4 +1,4 @@
-# Games Reviews
+redeams Reviews
 
 > Plataforma de reseñas de videojuegos — backend en PHP + MySQL, frontend con Bootstrap y JS.
 
