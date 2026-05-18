@@ -15,6 +15,7 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link rel="stylesheet" href="../dist/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -48,9 +49,18 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
 
-          <button class="btn btn-login ms-3 fw-bold btn-danger" onclick="openLogin()">
-              login
+          <!-- Botón de Login circular -->
+          <button class="btn btn-user-login ms-3" id="btnUserLogin" onclick="openLogin()" title="Iniciar sesión">
+              <i class="bi bi-person-circle"></i>
           </button>
+          
+          <!-- Foto de perfil del usuario (aparece cuando está autenticado) -->
+          <div class="user-profile ms-3" id="userProfile" style="display: none;">
+              <img id="profilePic" src="" alt="Perfil" class="rounded-circle" width="40" height="40">
+              <button class="btn btn-logout ms-2 btn-sm" onclick="ejecutarLogout()" title="Cerrar sesión">
+                  <i class="bi bi-box-arrow-right"></i>
+              </button>
+          </div>
         </div>
       </div>
     </nav>
