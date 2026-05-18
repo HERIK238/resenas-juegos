@@ -87,18 +87,58 @@ function verificarSesion() {
     fetch("../api/check_session.php")
     .then(response => response.json())
     .then(data => {
+        const btnUserLogin = document.getElementById("btnUserLogin");
+        const userProfile = document.getElementById("userProfile");
+        const profilePic = document.getElementById("profilePic");
+        
         if (data.logged) {
             console.log("Usuario autenticado. ID de sesión activo.");
-            // Aquí puedes ocultar los botones de "Iniciar Sesión" y mostrar el perfil
-            const btnLoginNavbar = document.querySelector(".btn-login");
-            if (btnLoginNavbar) btnLoginNavbar.style.display = "none";
+            // Ocultar botón de login, mostrar perfil con foto
+            if (btnUserLogin) btnUserLogin.style.display = "none";
+            if (userProfile) {
+                userProfile.style.display = "flex";
+                
+                // Mostrar foto de perfil si existe
+                if (data.profile_picture && profilePic) {
+                    profilePic.src = data.profile_picture;
+                    profilePic.style.display = "block";
+                } else if (profilePic) {
+                    // Si no hay foto, mostrar icono genérico
+                    profilePic.style.display = "none";
+                }
+            }
         } else {
             console.log("Navegando como Invitado.");
-            // Si es invitado, evaluamos si mostrar la pantalla de burbujas Spotify
+            // Mostrar login, ocultar perfil
+            if (btnUserLogin) btnUserLogin.style.display = "inline-flex";
+            if (userProfile) userProfile.style.display = "none";
+            // Si es invitado, evaluamos si mostrar la pantalla de burbujas
             evaluarMostrarBurbujas();
         }
     })
     .catch(error => console.error("Error verificando sesión:", error));
+}
+
+// ==========================================
+// NUEVA: FUNCIÓN PARA CERRAR SESIÓN
+// ==========================================
+function ejecutarLogout() {
+    fetch("../api/logout.php", {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success" || data.message === "Logout exitoso") {
+            alert("Has cerrado sesión correctamente.");
+            window.location.reload();
+        } else {
+            alert("Error al cerrar sesión: " + (data.message || data.error));
+        }
+    })
+    .catch(error => {
+        console.error("Error en el logout:", error);
+        alert("Hubo un problema al cerrar sesión.");
+    });
 }
 
 // ==========================================
@@ -184,15 +224,49 @@ document.addEventListener("click", function(e) {
 // RESPUESTA GLOBAL DE GOOGLE SIGN-IN
 // ==========================================
 window.handleCredentialResponse = function(response) {
-    console.log("Token de Google recibido de forma segura: ", response.credential);
+    console.log("Token de Google recibido de forma segura");
     
-    // Como tu función closeLogin() está en el otro archivo JS, 
-    // verificamos que exista antes de llamarla para evitar errores.
+    // Cerrar el modal de login
     if (typeof closeLogin === "function") {
         closeLogin();
     }
     
-    alert("¡Google te ha validado correctamente! Revisa la consola.");
+    // Enviar el token al backend para procesarlo
+    const token = response.credential;
     
-    // Aquí irá luego el fetch() para conectar con tu PHP
+    fetch("../api/google_login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            token: token
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            // Actualizar la interfaz sin recargar
+            const btnUserLogin = document.getElementById("btnUserLogin");
+            const userProfile = document.getElementById("userProfile");
+            const profilePic = document.getElementById("profilePic");
+            
+            // Ocultar botón login, mostrar perfil
+            if (btnUserLogin) btnUserLogin.style.display = "none";
+            if (userProfile) {
+                userProfile.style.display = "flex";
+                if (data.profile_picture && profilePic) {
+                    profilePic.src = data.profile_picture;
+                }
+            }
+            
+            alert("¡Bienvenido! Sesión iniciada correctamente.");
+        } else {
+            alert("Error en Google Login: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error enviando token a Google Login:", error);
+        alert("Hubo un problema al procesar el login con Google.");
+    });
 };

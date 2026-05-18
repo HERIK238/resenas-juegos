@@ -29,6 +29,68 @@
     color: white;
 }
 
+/* Botón de usuario circular */
+.btn-user-login {
+    background-color: #F20519;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-user-login:hover {
+    background-color: #8C030E;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Perfil del usuario */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-profile img {
+    border: 2px solid #F20519;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.user-profile img:hover {
+    transform: scale(1.1);
+}
+
+.btn-login {
+    background-color: #8C030E;
+    border-color: #8C030E;
+}
+
+.btn-login:hover {
+    background-color: #F20519;
+    border-color: #F20519;
+    color: white;
+}
+
+.btn-logout {
+    background-color: #F20519;
+    border-color: #F20519;
+    color: white;
+}
+
+.btn-logout:hover {
+    background-color: #8C030E;
+    border-color: #8C030E;
+    color: white;
+}
+
 .nav-link:hover {
     color: #8C030E;
 }

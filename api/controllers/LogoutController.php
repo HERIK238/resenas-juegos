@@ -18,18 +18,20 @@ class LogoutController {
             $success = $this->logoutService->logout();
             if ($success) {
                 echo json_encode([
-                    'success' => true, 
-                    'message' => 'Sesión cerrada correctamente',
+                    'status' => 'success', 
+                    'message' => 'Logout exitoso',
                 ]);    
             } else {
-                echo json_encode(['success' => false, 'message' => 'No se pudo cerrar la sesión']);
                 echo json_encode([
-                    'success' => false, 
+                    'status' => 'error', 
                     'message' => 'No se pudo cerrar la sesión',
                 ]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Método no permitido'
+            ]);
         }
     }
 }

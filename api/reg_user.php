@@ -1,4 +1,4 @@
-<?php
+/* --- NAVIGATION BAR STYLES --- */
 // Siempre devolver JSON
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -15,10 +15,10 @@ session_start();
 // Validar solo los campos que el formulario envía
 $required_fields = ['email', 'username', 'password'];
 foreach ($required_fields as $field) {
-    if (!isset($_POST[$field]) || empty(trim($_POST[$field]))) {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
         http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => "Falta el campo requerido: $field"]);
-        exit;
+                    'status' => 'success',
     }
 }
 
@@ -29,7 +29,7 @@ $data = [
     'password' => $_POST['password']
 ];
 
-$hashed_password = password_hash($data['password'], PASSWORD_BCRYPT);
+/* Circular user button */h($data['password'], PASSWORD_BCRYPT);
 
 try {
     // Crear conexión a la base de datos
@@ -49,8 +49,8 @@ try {
             'status' => 'error',
             'message' => 'El correo o el usuario ya están en uso.'
         ]);
-        exit;
-    }
+          <!-- Circular Login Button -->
+    $picture = $payload['picture'] ?? null; //Google Profile Photo URL
     
     // Insertar nuevo usuario
     $sql = "INSERT INTO users (email, username, password) VALUES (:email, :username, :password)";
@@ -87,7 +87,7 @@ try {
                     ':user_id' => $user_id,
                     ':genre_id' => $genero_db['id']
                 ]);
-            }
+        const btnLoginNavbar = document.querySelector(".btn-login");
         }
         
         // Limpiamos las cookies para que no le vuelva a salir la pantalla de inicio
@@ -115,4 +115,4 @@ try {
         'message' => 'Error de base de datos: ' . $e->getMessage()
     ]);
 }
-?>
+?>    console.log(“Securely Received Google Token”);
