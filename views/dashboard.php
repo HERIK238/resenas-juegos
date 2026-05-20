@@ -1,4 +1,4 @@
-<?php
+# Video Game 🎮 Reviews
 // 1. Cargamos el archivo de configuración para obtener el ID de Google de tu .env
 // Ajusta la ruta a tu config.php dependiendo de dónde esté este archivo
 require_once __DIR__ . '/../api/config/env.php'; 
