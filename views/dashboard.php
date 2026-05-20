@@ -1,4 +1,3 @@
-[1779317325004] INFO  (ext): SQLTools is starting
 <!-- 1. Cargamos el archivo de configuración para obtener el ID de Google de tu .env -->
 <!-- Ajusta la ruta a tu config.php dependiendo de dónde esté este archivo -->
 <?php
