@@ -1,4 +1,4 @@
-# 🎮 Reseñas de Videojuegos
+authoreo Game 🎮 Reviews
 
 [![PHP](https://img.shields.io/badge/PHP-8%2B-777BB4?style=flat&logo=php)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
@@ -183,7 +183,7 @@ Este proyecto está bajo licencia MIT. Ver archivo `LICENSE` para más detalles.
 ## 👨‍💻 Autor
 
 **HERIK**  
-📧 Contacto: [tu_email@ejemplo.com]  
+📧 Contact: herikbernalgomez@gmail.com
 🔗 GitHub: [@HERIK238](https://github.com/HERIK238)
 
 ---
