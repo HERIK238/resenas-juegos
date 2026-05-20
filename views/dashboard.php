@@ -1,6 +1,7 @@
-# Video Game 🎮 Reviews
-// 1. Cargamos el archivo de configuración para obtener el ID de Google de tu .env
-// Ajusta la ruta a tu config.php dependiendo de dónde esté este archivo
+[1779317325004] INFO  (ext): SQLTools is starting
+<!-- 1. Cargamos el archivo de configuración para obtener el ID de Google de tu .env -->
+<!-- Ajusta la ruta a tu config.php dependiendo de dónde esté este archivo -->
+<?php
 require_once __DIR__ . '/../api/config/env.php'; 
 EnvLoader::load(__DIR__ . '/../api/config/.env');
 $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
