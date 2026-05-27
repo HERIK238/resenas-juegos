@@ -1,118 +1,102 @@
-/* --- NAVIGATION BAR STYLES --- */
-// Siempre devolver JSON
-header("Content-Type: application/json; charset=UTF-8");
+<?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+header('Content-Type: application/json; charset=UTF-8');
 
-// Incluir archivo de conexión a la base de datos
-require_once './core/DBConfig.php';
+// No mostrar errores de PHP en producción
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
 
-// Crear variable de sesión
-session_start();
+require_once __DIR__ . '/core/DBConfig.php';
 
-// Validar solo los campos que el formulario envía
-$required_fields = ['email', 'username', 'password'];
-foreach ($required_fields as $field) {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-        http_response_code(400);
-        echo json_encode(['status' => 'error', 'message' => "Falta el campo requerido: $field"]);
-                    'status' => 'success',
-    }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
+    exit;
 }
 
-// Obtener y sanitizar datos
-$data = [
-    'email' => filter_var($_POST['email'], FILTER_SANITIZE_EMAIL),
-    'username' => htmlspecialchars($_POST['username']),
-    'password' => $_POST['password']
-];
+session_start();
 
-/* Circular user button */h($data['password'], PASSWORD_BCRYPT);
+$email = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
+$username = trim($_POST['username'] ?? '');
+$password = $_POST['password'] ?? '';
+$generos_str = trim($_POST['generos_juego'] ?? ($_COOKIE['generos_juego'] ?? ''));
+
+if (empty($email) || empty($username) || empty($password)) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios.']);
+    exit;
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'El correo electrónico no es válido.']);
+    exit;
+}
+
+if (strlen($password) < 8) {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'La contraseña debe tener al menos 8 caracteres.']);
+    exit;
+}
 
 try {
-    // Crear conexión a la base de datos
-    $auth = new DBConfig();
-    $db = $auth->getConnection();
-    
-    // Verificar si el email o username ya existen
-    $sql = "SELECT * FROM users WHERE email = :email OR username = :username";
+    $dbConfig = new DBConfig();
+    $db = $dbConfig->getConnection();
+
+    $sql = 'SELECT id FROM users WHERE email = :email OR username = :username';
     $stmt = $db->prepare($sql);
-    $stmt->execute([
-        ':email' => $data['email'],
-        ':username' => $data['username']
+    $stmt->execute([':email' => $email, ':username' => $username]);
+
+    if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo json_encode(['status' => 'error', 'message' => 'El correo o el usuario ya están en uso.']);
+        exit;
+    }
+
+    $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+
+    $insertSql = 'INSERT INTO users (email, username, password, role_id) VALUES (:email, :username, :password, 2)';
+    $insertStmt = $db->prepare($insertSql);
+    $insertStmt->execute([
+        ':email' => $email,
+        ':username' => $username,
+        ':password' => $passwordHash
     ]);
-    
-    if ($stmt->rowCount() > 0) {
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'El correo o el usuario ya están en uso.'
-        ]);
-          <!-- Circular Login Button -->
-    $picture = $payload['picture'] ?? null; //Google Profile Photo URL
-    
-    // Insertar nuevo usuario
-    $sql = "INSERT INTO users (email, username, password) VALUES (:email, :username, :password)";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([
-        ':email' => $data['email'],
-        ':username' => $data['username'],
-        ':password' => $hashed_password
-    ]);
-    
+
     $user_id = $db->lastInsertId();
-    
-    // =================================================================
-    // LÓGICA DE BURBUJAS: GUARDAR LOS GÉNEROS DE JUEGOS
-    // =================================================================
-    $generos_str = $_POST['generos_juego'] ?? $_COOKIE['generos_juego'] ?? '';
-    
+
     if (!empty($generos_str)) {
-        $generos_array = explode(',', $generos_str);
-        
-        $sqlGetGenre = "SELECT id FROM genres WHERE nombre = :nombre";
+        $generos_array = array_filter(array_map('trim', explode(',', $generos_str)));
+        $sqlGetGenre = 'SELECT id FROM genres WHERE nombre = :nombre';
         $stmtGetGenre = $db->prepare($sqlGetGenre);
-        
-        $sqlInsertRelation = "INSERT INTO user_genres (user_id, genre_id) VALUES (:user_id, :genre_id)";
+        $sqlInsertRelation = 'INSERT INTO user_genres (user_id, genre_id) VALUES (:user_id, :genre_id)';
         $stmtInsertRelation = $db->prepare($sqlInsertRelation);
 
         foreach ($generos_array as $nombre_genero) {
-            $nombre_genero = trim($nombre_genero);
+            if (empty($nombre_genero)) {
+                continue;
+            }
             $stmtGetGenre->execute([':nombre' => $nombre_genero]);
             $genero_db = $stmtGetGenre->fetch(PDO::FETCH_ASSOC);
-
             if ($genero_db) {
                 $stmtInsertRelation->execute([
                     ':user_id' => $user_id,
                     ':genre_id' => $genero_db['id']
                 ]);
-        const btnLoginNavbar = document.querySelector(".btn-login");
+            }
         }
-        
-        // Limpiamos las cookies para que no le vuelva a salir la pantalla de inicio
-        setcookie('intereses_completados', '', time() - 3600, '/');
-        setcookie('generos_juego', '', time() - 3600, '/');
     }
-    // =================================================================
-    
-    // Crear sesión para el usuario recién registrado
-    $_SESSION['user_id'] = $user_id;
-    $_SESSION['username'] = $data['username'];
-    $_SESSION['email'] = $data['email'];
-    $_SESSION['logged_in'] = true;
-    
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'Usuario registrado exitosamente.',
-        'user_id' => $user_id
-    ]);
 
+    setcookie('intereses_completados', '', time() - 3600, '/');
+    setcookie('generos_juego', '', time() - 3600, '/');
+
+    $_SESSION['user_id'] = $user_id;
+    $_SESSION['username'] = $username;
+    $_SESSION['email'] = $email;
+    $_SESSION['logged_in'] = true;
+
+    echo json_encode(['status' => 'success', 'message' => 'Usuario registrado exitosamente.', 'user_id' => $user_id]);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Error de base de datos: ' . $e->getMessage()
-    ]);
+    echo json_encode(['status' => 'error', 'message' => 'Error de base de datos.']);
 }
-?>    console.log(“Securely Received Google Token”);
