@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once './core/DBConfig.php';
+require_once __DIR__ . '/../api/config/csrf_check.php';
 
 // Iniciar sesión
 if (session_status() === PHP_SESSION_NONE) {
@@ -31,20 +32,43 @@ if (!isset($input['token']) || empty($input['token'])) {
 $token = $input['token'];
 
 try {
-    // Decodificar el JWT sin verificar la firma (en producción, deberías verificarla)
-    // Estructura JWT: header.payload.signature
-    $parts = explode('.', $token);
-    
-    if (count($parts) !== 3) {
-        throw new Exception('Token JWT inválido');
+
+    if (empty($token)) {
+        throw new Exception('Token no proporcionado');
     }
-    
-    // Decodificar el payload (segunda parte)
-    $payload = json_decode(base64_decode(str_replace(['-', '_'], ['+', '/'], $parts[1])), true);
-    
-    if (!$payload) {
-        throw new Exception('No se pudo decodificar el token');
+
+    require_once __DIR__ . '/config/env.php';
+    EnvLoader::load(__DIR__ . '/config/.env');
+    $clientId = EnvLoader::get('GOOGLE_CLIENT_ID', '');
+
+    if (empty($clientId)) {
+        throw new Exception('Google client ID no configurado');
     }
+
+    $tokenInfoUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=' . urlencode($token);
+    $response = file_get_contents($tokenInfoUrl);
+    if ($response === false) {
+        throw new Exception('No se pudo verificar el token con Google');
+    }
+
+    $payload = json_decode($response, true);
+    if (!is_array($payload) || isset($payload['error_description'])) {
+        throw new Exception('Token inválido según Google');
+    }
+
+    if (!isset($payload['aud']) || $payload['aud'] !== $clientId) {
+        throw new Exception('Audience inválido');
+    }
+
+    if (!in_array($payload['iss'], ['accounts.google.com', 'https://accounts.google.com'], true)) {
+        throw new Exception('Issuer inválido');
+    }
+
+    if (!isset($payload['exp']) || $payload['exp'] < time()) {
+        throw new Exception('Token expirado');
+    }
+
+    // Ahora puedes usar $payload['email'], $payload['sub'], $payload['name'], $payload['picture']
     
     // Extraer datos del usuario
     $email = $payload['email'] ?? null;

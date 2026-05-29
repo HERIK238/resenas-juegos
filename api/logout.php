@@ -1,6 +1,7 @@
 <?php
 // Requiere el middleware de auth
 // require_once __DIR__ . '/middleware/auth.php';
+require_once __DIR__ . '/../api/config/csrf_check.php';
 
 // Verifica que el usuario esté autenticado y tenga role_id = 2
 // Auth::checkAnyRole([1, 2, 3]);

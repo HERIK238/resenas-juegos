@@ -8,6 +8,7 @@ ini_set('display_startup_errors', 0);
 error_reporting(0);
 
 require_once __DIR__ . '/core/DBConfig.php';
+require_once __DIR__ . '/../api/config/csrf_check.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);

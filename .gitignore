@@ -1,3 +1,4 @@
 .vscode/
 api/config/.env
 api/debug_log.txt
+api/config/.htaccess
