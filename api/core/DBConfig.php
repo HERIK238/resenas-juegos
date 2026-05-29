@@ -21,13 +21,15 @@ class DBConfig {
             $this->db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             return $this->db;
         } catch (PDOException $e) {
+
+            error_log("Error de conexión BD: " . $e->getMessage());
+
             // Muestra el error de la base de datos
             http_response_code(500);
             header('Content-Type: application/json');
             echo json_encode([
                 'success' => false,
-                'message' => 'Error de conexión a la base de datos',
-                'error'   => $e->getMessage()
+                'message' => 'Error interno del servidor. Por favor, inténtelo más tarde.'
             ]);
             exit;
         }

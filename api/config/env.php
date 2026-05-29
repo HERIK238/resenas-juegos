@@ -1,5 +1,30 @@
 <?php
-// Logica env loader (cargador de env vanilla)
+// =======================================================
+// 1. CAPA DE SEGURIDAD GLOBAL (Agregado arriba del todo)
+// =======================================================
+
+// Desactivar visualización de errores al público para no filtrar datos del .env
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('log_errors', 1);
+error_reporting(E_ALL);
+
+// Iniciar sesión segura si no está activa para el Token CSRF
+if (session_status() === PHP_SESSION_NONE) {
+    session_start([
+        'cookie_httponly' => true,
+        'cookie_samesite' => 'Lax'
+    ]);
+}
+
+// Crear el token secreto si no existe en la sesión
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// =======================================================
+// 2. TU LÓGICA DE ENVLOADER (Se mantiene intacta)
+// =======================================================
 class EnvLoader {
     public static function load($path) {
         if (!file_exists($path)) {
