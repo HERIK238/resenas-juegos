@@ -1,10 +1,11 @@
 <?php
+// api/config/csrf_check.php
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Si la petición es POST, exigimos que venga el Token CSRF
+// 1. ESCUDO CSRF AUTOMÁTICO: Si la petición es POST, exigimos que venga el Token
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $headers = getallheaders();
     
@@ -19,5 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'message' => 'Error de seguridad: Token CSRF inválido o vencido.'
         ]);
         exit; // Frena la ejecución del endpoint de inmediato
+    }
+}
+
+// 2. FUNCIÓN MÁGICA CONTRA SESSION FIXATION (Para usar en tus controladores de login)
+if (!function_exists('iniciar_sesion_segura')) {
+    function iniciar_sesion_segura($user_id, $role_id) {
+        // Rompe la llave vieja de sesión anónima y genera una nueva limpia para el usuario
+        session_regenerate_id(true);
+        
+        // Guardamos los datos reales del usuario en la nueva sesión blindada
+        $_SESSION['user_id'] = $user_id;
+        $_SESSION['role_id'] = $role_id;
+        
+        // Cambiamos también el token CSRF para el nuevo estado del usuario logueado
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 }

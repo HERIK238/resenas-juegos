@@ -93,3 +93,13 @@ document.addEventListener("keydown", (e) => {
         window.closeRegistro();
     }
 });
+
+// abrir configuración del usuario
+
+window.openUserConfig = function () {
+    try {
+        window.location.href = "../views/settings.php";
+    } catch (error) {
+        console.error("Error al abrir configuración del usuario:", error);
+    }
+}

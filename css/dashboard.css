@@ -85,6 +85,15 @@
     color: white;
 }
 
+.dropdown-item.text-config {
+    color: #0d6efd;
+}
+
+.dropdown-item.text-config:hover {
+    background-color: #0d6efd;
+    color: white !important;
+}
+
 .btn-logout:hover {
     background-color: #8C030E;
     border-color: #8C030E;
