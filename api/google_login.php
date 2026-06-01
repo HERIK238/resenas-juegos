@@ -6,7 +6,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once './core/DBConfig.php';
-require_once __DIR__ . '/../api/config/csrf_check.php';
+//require_once __DIR__ . '/../api/config/csrf_check.php';
 
 // Iniciar sesión
 if (session_status() === PHP_SESSION_NONE) {

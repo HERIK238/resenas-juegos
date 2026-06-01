@@ -18,19 +18,20 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     
+    <meta name="csrf-token" content="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <!-- <a class="navbar-brand" href="#">Navbar</a> -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">reviews</a></li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Dropdown
@@ -55,12 +56,37 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
           </button>
           
           <!-- Foto de perfil del usuario (aparece cuando está autenticado) -->
-          <div class="user-profile ms-3" id="userProfile" style="display: none;">
-              <img id="profilePic" src="" alt="Perfil" class="rounded-circle" width="40" height="40">
-              <button class="btn btn-logout ms-2 btn-sm" onclick="ejecutarLogout()" title="Cerrar sesión">
-                  <i class="bi bi-box-arrow-right"></i>
-              </button>
-          </div>
+<!-- Foto de perfil del usuario (aparece cuando está autenticado) -->
+<div class="user-profile ms-3 dropdown" id="userProfile" style="display: none;">
+    <img 
+        id="profilePic" 
+        src="" 
+        alt="Perfil" 
+        class="rounded-circle dropdown-toggle" 
+        width="40" 
+        height="40"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        style="cursor: pointer; object-fit: cover;"
+    >
+    <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+            <span class="dropdown-item-text fw-bold" id="dropdownUsername"></span>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li>
+            <button class="dropdown-item text-config" id="dropdownConfig" onclick="window.openUserConfig()">
+                <i class="bi bi-gear me-2"></i>Settings
+            </button>
+        </li>
+        <li>
+            <button class="dropdown-item text-danger" onclick="ejecutarLogout()">
+                <i class="bi bi-box-arrow-right me-2"></i>Log out
+            </button>
+        </li>
+    </ul>
+</div>
         </div>
       </div>
     </nav>
@@ -77,6 +103,19 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
           <div class="modal-body">
             <input type="text" class="form-control mb-3" placeholder="Review title"/>
             <textarea class="form-control mb-3" placeholder="Review content"></textarea>
+            <select class="form-select mb-3">
+              <option selected>Genres</option>
+              <option value="1">Action</option>
+              <option value="2">Adventure</option>
+              <option value="3">Sports</option>
+              <option value="4">Strategy</option>
+              <option value="5">open world</option>
+              <option value="6">RPG</option>
+              <option value="7">Shooter</option>
+              <option value="8">simulation</option>
+              <option value="9">Survival</option>
+              <option value="10">terror</option>
+            </select>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-cerrar" onclick="document.getElementById('Modal').style.display='none'">Close</button>
@@ -196,7 +235,7 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script defer src="../js/dashboard.js"></script>
+    <script  src="../js/dashboard.js"></script>
     <script defer src="../js/main.js"></script>
 </body>
 </html>
