@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificar si el usuario ya tiene sesión iniciada al cargar la página
+    // Check if the user already has an active session on page load
     verificarSesion();
 
-    // Conectar el formulario de Inicio de Sesión
+    // Attach the login form handler
     const formLogin = document.getElementById("formLogin");
     if (formLogin) {
         formLogin.addEventListener("submit", (e) => {
@@ -29,7 +29,7 @@ function getCsrfToken() {
 }
 
 // ==========================================
-// 1. FUNCIÓN PARA INICIAR SESIÓN (Tradicional)
+// 1. LOGIN FUNCTION (Traditional)
 // ==========================================
 function ejecutarLogin(formulario) {
     const formData = new FormData(formulario);
@@ -42,7 +42,7 @@ function ejecutarLogin(formulario) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            alert("¡Login exitoso! Redireccionando...");
+            alert("Login successful! Redirecting...");
             window.location.reload();
         } else {
             alert("Error: " + data.message);
@@ -55,12 +55,12 @@ function ejecutarLogin(formulario) {
 }
 
 // ==========================================
-// 2. FUNCIÓN PARA REGISTRAR USUARIO + GÉNEROS
+// 2. USER REGISTRATION + PREFERRED GENRES
 // ==========================================
 function ejecutarRegistro(formulario) {
     const formData = new FormData(formulario);
     
-    // Obtenemos los géneros seleccionados en las burbujas desde el input oculto
+    // Read selected genres from the hidden bubble input
     const generosInput = document.getElementById("generos_input");
     if (generosInput && generosInput.value) {
         formData.append("generos_juego", generosInput.value);
@@ -74,22 +74,22 @@ function ejecutarRegistro(formulario) {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            alert("¡Registro completado con éxito!");
+            alert("Registration completed successfully!");
             document.cookie = "intereses_completados=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             document.cookie = "generos_juego=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             window.location.reload();
         } else {
-            alert("Error al registrarse: " + data.message);
+            alert("Registration error: " + data.message);
         }
     })
     .catch(error => {
-        console.error("Error en el registro:", error);
-        alert("Hubo un problema al procesar el registro.");
+        console.error("Error in registration:", error);
+        alert("There was a problem processing the registration.");
     });
 }
 
 // ==========================================
-// 3. FUNCIÓN PARA VERIFICAR LA SESIÓN ACTIVA
+// 3. CHECK ACTIVE SESSION
 // ==========================================
 function verificarSesion() {
     fetch("../api/check_session.php")
@@ -100,7 +100,7 @@ function verificarSesion() {
         const profilePic = document.getElementById("profilePic");
         
         if (data.logged) {
-            console.log("Usuario autenticado. ID de sesión activo.");
+            console.log("User authenticated. Active session found.");
             if (btnUserLogin) btnUserLogin.style.display = "none";
             if (userProfile) {
                 userProfile.style.display = "flex";
@@ -115,17 +115,17 @@ function verificarSesion() {
                 }
             }
         } else {
-            console.log("Navegando como Invitado.");
+            console.log("Browsing as Guest.");
             if (btnUserLogin) btnUserLogin.style.display = "inline-flex";
             if (userProfile) userProfile.style.display = "none";
             evaluarMostrarBurbujas();
         }
     })
-    .catch(error => console.error("Error verificando sesión:", error));
+    .catch(error => console.error("Error verifying session:", error));
 }
 
 // ==========================================
-// FUNCIÓN PARA CERRAR SESIÓN
+// LOGOUT FUNCTION
 // ==========================================
 function ejecutarLogout() {
     fetch("../api/logout.php", {
@@ -135,20 +135,20 @@ function ejecutarLogout() {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success" || data.message === "Logout exitoso") {
-            alert("Has cerrado sesión correctamente.");
+            alert("You have logged out successfully.");
             window.location.reload();
         } else {
-            alert("Error al cerrar sesión: " + (data.message || data.error));
+            alert("Logout error: " + (data.message || data.error));
         }
     })
     .catch(error => {
         console.error("Error en el logout:", error);
-        alert("Hubo un problema al cerrar sesión.");
+        alert("There was a problem logging out.");
     });
 }
 
 // ==========================================
-// 4. LÓGICA DE LAS BURBUJAS PARA INVITADOS
+// 4. GUEST GENRE BUBBLE LOGIC
 // ==========================================
 function evaluarMostrarBurbujas() {
     const yaRespondio = getCookie("intereses_completados");
@@ -165,7 +165,7 @@ function evaluarMostrarBurbujas() {
 function finalizarSeleccionInvitado() {
     const generos = document.getElementById("generos_input").value;
     if (!generos) {
-        alert("Por favor, selecciona al menos un género.");
+        alert("Please select at least one genre.");
         return;
     }
     
@@ -197,7 +197,7 @@ function getCookie(nombre) {
 }
 
 // ==========================================
-// BURBUJAS: CAMBIAR COLOR AL DAR CLIC
+// BUBBLE SELECTION: TOGGLE STYLES ON CLICK
 // ==========================================
 document.addEventListener("click", function(e) {
     if (e.target.classList.contains("bubble")) {
@@ -209,14 +209,14 @@ document.addEventListener("click", function(e) {
         const generosInput = document.getElementById("generos_input");
         if (generosInput) {
             generosInput.value = valores.join(",");
-            console.log("Géneros elegidos listos para guardar: ", generosInput.value); 
+            console.log("Selected genres ready to save: ", generosInput.value); 
         }
     }
 });
 
 // ==========================================
-// RESPUESTA GLOBAL DE GOOGLE SIGN-IN
-// (No usa CSRF — Google verifica el id_token directamente)
+// GLOBAL GOOGLE SIGN-IN RESPONSE
+// (Does not use CSRF — Google verifies the id_token directly)
 // ==========================================
 window.handleCredentialResponse = function(response) {
     console.log("Token de Google recibido de forma segura");
@@ -229,7 +229,7 @@ window.handleCredentialResponse = function(response) {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
-            // Sin X-CSRF-TOKEN — el id_token de Google es la verificación
+            // No X-CSRF-TOKEN — the id_token from Google is the verification
         },
         body: JSON.stringify({ token: response.credential })
     })
@@ -248,9 +248,9 @@ window.handleCredentialResponse = function(response) {
                 }
             }
             
-            alert("¡Bienvenido! Sesión iniciada correctamente.");
+            alert("Welcome! You have successfully signed in.");
         } else {
-            alert("Error en Google Login: " + data.message);
+            alert("Google Login error: " + data.message);
         }
     })
     .catch(error => {

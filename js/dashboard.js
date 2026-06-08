@@ -1,8 +1,8 @@
 // ==========================================
-// 1. FUNCIONES GLOBALES DE APERTURA (window.)
+// 1. GLOBAL OPEN FUNCTIONS (window.)
 // ==========================================
 
-// Abrir el modal de Reseñas (Botón +)
+// Open the Review modal (Plus button)
 window.openModal = function() {
     const modalEl = document.getElementById("Modal");
     if (modalEl) {
@@ -12,7 +12,7 @@ window.openModal = function() {
     }
 };
 
-// Abrir el modal de Inicio de Sesión
+// Open the Login modal
 window.openLogin = function() {
     const modalLogin = document.getElementById("ModalLogin");
     if (modalLogin) {
@@ -23,7 +23,7 @@ window.openLogin = function() {
     }
 };
 
-// Abrir el modal de Registro
+// Open the Register modal
 window.openRegistro = function() {
     const modalRegistro = document.getElementById("ModalRegistro");
     if (modalRegistro) {
@@ -35,7 +35,7 @@ window.openRegistro = function() {
 };
 
 // ==========================================
-// 2. FUNCIONES GLOBALES DE CIERRE
+// 2. GLOBAL CLOSE FUNCTIONS
 // ==========================================
 
 window.closeModal = function() {
@@ -66,16 +66,23 @@ window.closeRegistro = function() {
 };
 
 // ==========================================
-// 3. CONEXIÓN DE EVENTOS (CLICS Y ESCAPE)
+// 3. EVENT BINDINGS (CLICKS AND ESCAPE)
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Conectamos el botón "+" con la función de abrir reseña
+    // Connect the "+" button to the review modal
     const btnPri = document.getElementById("btn_pri");
     if (btnPri) {
         btnPri.onclick = window.openModal;
     }
 
-    // Cerrar cualquier modal al hacer clic en el fondo oscuro
+    const uploadReviewButton = document.getElementById('btnUploadReview');
+    if (uploadReviewButton) {
+        uploadReviewButton.addEventListener('click', submitReview);
+    }
+
+    fillReviewOptions();
+
+    // Close any modal when clicking the dark overlay
     window.addEventListener("click", (e) => {
         if (e.target.classList.contains("custom-modal")) {
             window.closeModal();
@@ -85,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Cerrar todo con la tecla Escape (Súper útil)
+// Close everything with the Escape key (very useful)
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         window.closeModal();
@@ -94,12 +101,96 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// abrir configuración del usuario
+function fillReviewOptions() {
+    const reviewGenreSelect = document.getElementById('reviewGenre');
+    if (!reviewGenreSelect) {
+        return;
+    }
+
+    fetch('../api/catalog.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                return;
+            }
+
+            if (Array.isArray(data.data.genres)) {
+                const genreOptions = data.data.genres.map(genre => {
+                    return `<option value="${genre.nombre}">${genre.nombre}</option>`;
+                }).join('');
+                if (genreOptions) {
+                    reviewGenreSelect.innerHTML = '<option selected disabled value="">Select game genre</option>' + genreOptions;
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading review options:', error);
+        });
+}
+
+function submitReview() {
+    const title = document.getElementById('reviewTitle')?.value.trim();
+    const content = document.getElementById('reviewContent')?.value.trim();
+    const genre = document.getElementById('reviewGenre')?.value;
+    const rating = document.getElementById('reviewRating')?.value;
+
+    if (!title || !content || !genre) {
+        alert('Please complete the game title, review text, and genre.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('titulo', title);
+    formData.append('contenido', content);
+    formData.append('genre', genre);
+    if (rating) {
+        formData.append('calificacion', rating);
+    }
+
+    fetch('../api/reviews.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Review submitted successfully.');
+            window.closeModal();
+            window.location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'The review could not be saved.'));
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting review:', error);
+        alert('An error occurred while submitting the review.');
+    });
+}
+
+// open user settings
 
 window.openUserConfig = function () {
     try {
         window.location.href = "../views/settings.php";
     } catch (error) {
-        console.error("Error al abrir configuración del usuario:", error);
+        console.error("Error opening user settings:", error);
+    }
+}
+
+// open user reviews
+window.openUserReviews = function () {
+    try {
+        window.location.href = "../views/reviews.php";
+    } catch (error) {
+        console.error("Error opening user reviews:", error);
+    }
+}
+
+// open user recommendations
+window.openUserRecommendations = function () {
+    try {
+        window.location.href = "../views/recommendations.php";
+    } catch (error) {
+        console.error("Error al abrir recomendaciones del usuario:", error);
     }
 }

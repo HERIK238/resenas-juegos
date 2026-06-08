@@ -5,35 +5,35 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 1. ESCUDO CSRF AUTOMÁTICO: Si la petición es POST, exigimos que venga el Token
+// 1. AUTOMATIC CSRF SHIELD: If the request is POST, the token must be present
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $headers = getallheaders();
     
-    // El token puede llegar en la cabecera de JS (X-CSRF-TOKEN) o en un input normal ($_POST)
+    // The token can arrive in the JS header (X-CSRF-TOKEN) or in a normal input ($_POST)
     $clientToken = $headers['X-CSRF-TOKEN'] ?? $_POST['csrf_token'] ?? '';
 
     if (empty($clientToken) || !hash_equals($_SESSION['csrf_token'], $clientToken)) {
-        http_response_code(403); // Acceso denegado / Prohibido
+        http_response_code(403); // Access denied / Forbidden
         header('Content-Type: application/json');
         echo json_encode([
             'success' => false,
-            'message' => 'Error de seguridad: Token CSRF inválido o vencido.'
+            'message' => 'Security error: CSRF token invalid or expired.'
         ]);
-        exit; // Frena la ejecución del endpoint de inmediato
+        exit; // Stops endpoint execution immediately
     }
 }
 
-// 2. FUNCIÓN MÁGICA CONTRA SESSION FIXATION (Para usar en tus controladores de login)
+// 2. MAGIC FUNCTION AGAINST SESSION FIXATION (For use in login controllers)
 if (!function_exists('iniciar_sesion_segura')) {
     function iniciar_sesion_segura($user_id, $role_id) {
-        // Rompe la llave vieja de sesión anónima y genera una nueva limpia para el usuario
+        // Break the old anonymous session ID and generate a clean new one for the user
         session_regenerate_id(true);
         
-        // Guardamos los datos reales del usuario en la nueva sesión blindada
+        // Store the actual user data in the new secured session
         $_SESSION['user_id'] = $user_id;
         $_SESSION['role_id'] = $role_id;
         
-        // Cambiamos también el token CSRF para el nuevo estado del usuario logueado
+        // Also change the CSRF token for the new logged-in user state
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
 }

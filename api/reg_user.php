@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json; charset=UTF-8');
 
-// No mostrar errores de PHP en producción
+// Do not display PHP errors in production
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
@@ -12,7 +12,7 @@ require_once __DIR__ . '/../api/config/csrf_check.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
     exit;
 }
 
@@ -25,19 +25,19 @@ $generos_str = trim($_POST['generos_juego'] ?? ($_COOKIE['generos_juego'] ?? '')
 
 if (empty($email) || empty($username) || empty($password)) {
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios.']);
+    echo json_encode(['status' => 'error', 'message' => 'Required fields are missing.']);
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'El correo electrónico no es válido.']);
+    echo json_encode(['status' => 'error', 'message' => 'The email address is not valid.']);
     exit;
 }
 
 if (strlen($password) < 8) {
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'La contraseña debe tener al menos 8 caracteres.']);
+    echo json_encode(['status' => 'error', 'message' => 'The password must be at least 8 characters long.']);
     exit;
 }
 
@@ -50,7 +50,7 @@ try {
     $stmt->execute([':email' => $email, ':username' => $username]);
 
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo json_encode(['status' => 'error', 'message' => 'El correo o el usuario ya están en uso.']);
+        echo json_encode(['status' => 'error', 'message' => 'The email or username is already in use.']);
         exit;
     }
 
@@ -99,5 +99,5 @@ try {
     echo json_encode(['status' => 'success', 'message' => 'Usuario registrado exitosamente.', 'user_id' => $user_id]);
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Error de base de datos.']);
+    echo json_encode(['status' => 'error', 'message' => 'Database error.']);
 }

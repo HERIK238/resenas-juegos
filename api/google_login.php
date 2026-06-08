@@ -8,15 +8,15 @@ error_reporting(E_ALL);
 require_once './core/DBConfig.php';
 //require_once __DIR__ . '/../api/config/csrf_check.php';
 
-// Iniciar sesión
+// Start session
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Verificar que sea POST
+// Verify POST method
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
+    echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
     exit;
 }
 
@@ -25,7 +25,7 @@ $input = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($input['token']) || empty($input['token'])) {
     http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Token no proporcionado']);
+    echo json_encode(['status' => 'error', 'message' => 'Token not provided']);
     exit;
 }
 
@@ -34,7 +34,7 @@ $token = $input['token'];
 try {
 
     if (empty($token)) {
-        throw new Exception('Token no proporcionado');
+        throw new Exception('Token not provided');
     }
 
     require_once __DIR__ . '/config/env.php';
@@ -42,7 +42,7 @@ try {
     $clientId = EnvLoader::get('GOOGLE_CLIENT_ID', '');
 
     if (empty($clientId)) {
-        throw new Exception('Google client ID no configurado');
+        throw new Exception('Google client ID not configured');
     }
 
     $tokenInfoUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=' . urlencode($token);
@@ -53,19 +53,19 @@ try {
 
     $payload = json_decode($response, true);
     if (!is_array($payload) || isset($payload['error_description'])) {
-        throw new Exception('Token inválido según Google');
+        throw new Exception('Token invalid according to Google');
     }
 
     if (!isset($payload['aud']) || $payload['aud'] !== $clientId) {
-        throw new Exception('Audience inválido');
+        throw new Exception('Invalid audience');
     }
 
     if (!in_array($payload['iss'], ['accounts.google.com', 'https://accounts.google.com'], true)) {
-        throw new Exception('Issuer inválido');
+        throw new Exception('Invalid issuer');
     }
 
     if (!isset($payload['exp']) || $payload['exp'] < time()) {
-        throw new Exception('Token expirado');
+        throw new Exception('Token expired');
     }
 
     // Ahora puedes usar $payload['email'], $payload['sub'], $payload['name'], $payload['picture']
@@ -77,7 +77,7 @@ try {
     $picture = $payload['picture'] ?? null; // URL de la foto de perfil de Google
     
     if (!$email || !$google_id) {
-        throw new Exception('Datos incompletos en el token de Google');
+        throw new Exception('Incomplete data in Google token');
     }
     
     // Conectar a la base de datos
@@ -111,7 +111,7 @@ try {
         // Generar un username basado en el email
         $username = explode('@', $email)[0];
         
-        // Verificar que el username sea único
+        // Verify that the username is unique
         $checkSql = "SELECT id FROM users WHERE username = :username";
         $checkStmt = $db->prepare($checkSql);
         $checkStmt->execute([':username' => $username]);
@@ -137,7 +137,7 @@ try {
         $user_id = $db->lastInsertId();
     }
     
-    // Crear sesión para el usuario
+    // Create a session for the user
     $_SESSION['user_id'] = $user_id;
     $_SESSION['email'] = $email;
     $_SESSION['username'] = $user['username'] ?? $username;
@@ -146,7 +146,7 @@ try {
     
     echo json_encode([
         'status' => 'success',
-        'message' => 'Login con Google exitoso',
+        'message' => 'Google login successful',
         'user_id' => $user_id,
         'profile_picture' => $picture,
         'username' => $user['username'] ?? $username
@@ -156,7 +156,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'status' => 'error',
-        'message' => 'Error procesando Google Login: ' . $e->getMessage()
+        'message' => 'Error processing Google login: ' . $e->getMessage()
     ]);
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../core/DBConfig.php';
 
-class UserList { // Le cambié el nombre a la clase para que no choque con la de Auth
+class UserList { // Renamed the class so it does not conflict with Auth
     private $db;
 
     public function __construct() {

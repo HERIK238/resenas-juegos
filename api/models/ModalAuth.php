@@ -12,7 +12,7 @@ class User {
     public function insertUser($data) {
         try {
             if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                throw new Exception("El correo no tiene un formato válido");
+                throw new Exception("The email format is not valid");
             }
             $sqlCheckEmail = "SELECT COUNT(*) as count FROM users WHERE email = :email";
             $stmtCheckEmail = $this->db->prepare($sqlCheckEmail);
@@ -20,7 +20,7 @@ class User {
             $stmtCheckEmail->execute();
             
             if ($stmtCheckEmail->fetch(PDO::FETCH_ASSOC)['count'] > 0) {
-                throw new Exception("El correo ya está registrado.");
+                throw new Exception("The email is already registered.");
             }
 
             $passwordHash = password_hash($data['password'], PASSWORD_BCRYPT);
@@ -36,7 +36,7 @@ class User {
 
             return $this->db->lastInsertId();
         } catch (PDOException $e) {
-            throw new Exception("Error al crear usuario: " . $e->getMessage());
+            throw new Exception("Error creating user: " . $e->getMessage());
         }
     }
 }

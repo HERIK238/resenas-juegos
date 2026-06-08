@@ -1,0 +1,46 @@
+.change-form {
+    margin: 20px;
+    color: antiquewhite;
+
+}
+
+.form-control-change-form{
+    background-color: antiquewhite;
+    color: black;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    width: 300px;
+    height: 35px;
+}
+
+::placeholder {
+    color: gray;
+    opacity: 1;
+}
+
+input.form-control-change-form:focus {
+    outline: none;
+    box-shadow: 0 0 30px red;
+    border: none;   
+    border-radius: 8px;
+}
+
+.bubble {
+    background-color: #333333;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none; /* Prevent accidental text selection */
+}
+
+/* Style when clicked (selected) */
+.bubble.selected {
+    background-color: #F20519; /* Color rojo */
+    font-weight: bold;
+    transform: scale(1.1); /* Slight scale-up effect */
+    box-shadow: 0 4px 15px rgba(242, 5, 25, 0.5);
+}

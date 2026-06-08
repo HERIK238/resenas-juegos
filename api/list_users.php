@@ -1,8 +1,8 @@
 <?php
-// Requiere el middleware de auth
+// Require auth middleware
 require_once __DIR__ . '/middleware/auth.php';
 
-// Verifica que el usuario esté autenticado y tenga role_id = 2
+// Verify that the user is authenticated and has role_id = 2
 Auth::checkRole(2);
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -13,11 +13,11 @@ if (!isset($_SESSION['user_id'])) {
     echo json_encode(['error' => 'No autorizado']);
     exit;
 }
-// Requiere el controllador para acceder a su clase
+// Require the controller to access its class
 require_once __DIR__ . '/controllers/ListUserController.php';
 
-// Crea una instancia del controlador
+// Create controller instance
 $controller = new ListUserController();
-// Llama al método que maneja la petición HTTP (POST) y responde en JSON
+// Call the method that handles the HTTP request and returns JSON
 $controller->handleRequest();
 ?>
