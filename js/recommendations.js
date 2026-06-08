@@ -10,17 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+window.openUserHome = function () {
+    try {
+        window.location.href = "../views/dashboard.php";
+    } catch (error) {
+        console.error("Error opening home page:", error);
+    }
+}
+
 window.openUserReviews = function () {
     try {
         window.location.href = "../views/reviews.php";
     } catch (error) {
         console.error("Error opening user reviews:", error);
-    }
-
-    try {
-        window.location.href = "../views/dashboard.php";
-    } catch (error) {
-        console.error("Error opening user dashboard:", error);
     }
 }
 
