@@ -23,9 +23,8 @@ class ReviewsController {
     }
 
     private function listReviews() {
-        session_start();
         if (empty($_SESSION['user_id'])) {
-            $this->sendResponse(['success' => false, 'message' => 'No autorizado'], 403);
+            $this->sendResponse(['success' => false, 'message' => 'Unauthorized'], 403);
             return;
         }
 
@@ -34,24 +33,23 @@ class ReviewsController {
     }
 
     private function createReview() {
-        session_start();
         if (empty($_SESSION['user_id'])) {
-            $this->sendResponse(['success' => false, 'message' => 'No autorizado'], 403);
+            $this->sendResponse(['success' => false, 'message' => 'Unauthorized'], 403);
             return;
         }
 
-        $gameId = $_POST['game_id'] ?? null;
+        $gameName = trim($_POST['game_name'] ?? '');
         $title = trim($_POST['titulo'] ?? '');
         $content = trim($_POST['contenido'] ?? '');
         $rating = isset($_POST['calificacion']) && $_POST['calificacion'] !== '' ? $_POST['calificacion'] : null;
 
-        if (!$gameId) {
-            $this->sendResponse(['success' => false, 'message' => 'Game ID is required'], 400);
+        if (!$gameName) {
+            $this->sendResponse(['success' => false, 'message' => 'Game name is required'], 400);
             return;
         }
 
         try {
-            $result = $this->service->saveReview($_SESSION['user_id'], $gameId, $title, $content, $rating);
+            $result = $this->service->saveReview($_SESSION['user_id'], $gameName, $title, $content, $rating);
             $this->sendResponse(['success' => true, 'message' => $result['message']]);
         } catch (Exception $e) {
             $this->sendResponse(['success' => false, 'message' => $e->getMessage()], 400);

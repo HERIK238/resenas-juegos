@@ -12,10 +12,10 @@ class ReviewsService {
         return $this->model->getReviewsByUser($userId);
     }
 
-    public function saveReview($userId, $gameId, $title, $content, $rating = null) {
-        $game = $this->model->getGameById($gameId);
+    public function saveReview($userId, $gameName, $title, $content, $rating = null) {
+        $game = $this->model->getOrCreateGameByName($gameName);
         if (!$game) {
-            throw new Exception('Game not found');
+            throw new Exception('Failed to create or retrieve game');
         }
 
         if (empty($title) || empty($content)) {
@@ -26,7 +26,7 @@ class ReviewsService {
             throw new Exception('Rating must be between 0 and 10');
         }
 
-        $this->model->createReview($userId, $gameId, $title, $content, $rating);
+        $this->model->createReview($userId, $game['id'], $title, $content, $rating);
         return ['message' => 'Review created successfully'];
     }
 

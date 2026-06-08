@@ -40,6 +40,30 @@ class ReviewModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getOrCreateGameByName($gameName) {
+        // Search for existing game (case-insensitive)
+        $sql = "SELECT id, titulo, descripcion, portada_url, created_at FROM games WHERE LOWER(titulo) = LOWER(:titulo)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':titulo' => $gameName]);
+        $game = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($game) {
+            return $game;
+        }
+
+        // Game doesn't exist, create it
+        $createSql = "INSERT INTO games (titulo, descripcion, portada_url, created_at) VALUES (:titulo, :descripcion, :portada_url, NOW())";
+        $createStmt = $this->db->prepare($createSql);
+        $createStmt->execute([
+            ':titulo' => $gameName,
+            ':descripcion' => '',
+            ':portada_url' => null
+        ]);
+
+        $gameId = $this->db->lastInsertId();
+        return $this->getGameById($gameId);
+    }
+
     public function getAllGames($search = null) {
         $sql = "SELECT id, titulo, descripcion, portada_url, created_at FROM games";
         $params = [];
