@@ -115,7 +115,18 @@ function fillReviewOptions() {
             }
 
             if (Array.isArray(data.data.genres)) {
-                const genreOptions = data.data.genres.map(genre => {
+                // Remove duplicates by using a Set
+                const uniqueGenres = [];
+                const genreNames = new Set();
+                
+                data.data.genres.forEach(genre => {
+                    if (!genreNames.has(genre.nombre)) {
+                        genreNames.add(genre.nombre);
+                        uniqueGenres.push(genre);
+                    }
+                });
+
+                const genreOptions = uniqueGenres.map(genre => {
                     return `<option value="${genre.nombre}">${genre.nombre}</option>`;
                 }).join('');
                 if (genreOptions) {
@@ -129,17 +140,19 @@ function fillReviewOptions() {
 }
 
 function submitReview() {
+    const gameName = document.getElementById('reviewGameName')?.value.trim();
     const title = document.getElementById('reviewTitle')?.value.trim();
     const content = document.getElementById('reviewContent')?.value.trim();
     const genre = document.getElementById('reviewGenre')?.value;
     const rating = document.getElementById('reviewRating')?.value;
 
-    if (!title || !content || !genre) {
-        alert('Please complete the game title, review text, and genre.');
+    if (!gameName || !title || !content || !genre) {
+        alert('Please complete the game name, review title, review text, and genre.');
         return;
     }
 
     const formData = new FormData();
+    formData.append('game_name', gameName);
     formData.append('titulo', title);
     formData.append('contenido', content);
     formData.append('genre', genre);

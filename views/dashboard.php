@@ -111,7 +111,8 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
             <button type="button" class="btn-close btn-cerrar" onclick="document.getElementById('Modal').style.display='none'"></button>
           </div>
           <div class="modal-body">
-            <input id="reviewTitle" type="text" class="form-control mb-3" placeholder="Game title"/>
+            <input id="reviewGameName" type="text" class="form-control mb-3" placeholder="Game name"/>
+            <input id="reviewTitle" type="text" class="form-control mb-3" placeholder="Review title"/>
             <textarea id="reviewContent" class="form-control mb-3" placeholder="Write your review or game guide"></textarea>
             <select id="reviewGenre" class="form-select mb-3">
               <option selected disabled value="">Select game genre</option>
