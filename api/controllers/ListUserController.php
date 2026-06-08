@@ -1,17 +1,17 @@
 <?php
-// Requiere el servicio
+// Require the service
 require_once __DIR__ . '/../services/UserListService.php';
 
-// Clase controlador
+// Controller class
 class ListUserController {
     private $UserListService;
 
-    // Crea una instancia del servicio de usuario
+    // Create an instance of the user service
     public function __construct() {
         $this->UserListService = new UserListService();
     }
 
-    // Este método maneja la petición HTTP
+    // This method handles the HTTP request
     public function handleRequest() {
         header('Content-Type: application/json');
         
@@ -22,12 +22,12 @@ class ListUserController {
             } catch (Exception $e) {
                 echo json_encode([
                     'success' => false, 
-                    'message' => 'Error al obtener usuarios',
+                    'message' => 'Error fetching users',
                     'error' => $e->getMessage()
                 ]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            echo json_encode(['success' => false, 'message' => 'Method not allowed']);
         }
     }
 }

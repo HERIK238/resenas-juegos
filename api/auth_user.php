@@ -15,19 +15,19 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 header('Content-Type: application/json; charset=utf-8');
 
-// Solo aceptar POST
+// Accept POST only
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Content-Type: application/json');
     http_response_code(405);
     echo json_encode([
         'status' => 'error',
-        'message' => 'Método no permitido'
+        'message' => 'Method not allowed'
     ]);
     exit;
 }
 
-// Crear instancia del controlador 
+// Create controller instance
 $authController = new AuthController();
-// Llama al método que maneja la petición HTTP (POST) y responde en JSON
+// Call the method that handles the HTTP POST request and returns JSON
 $authController->login();
 ?>

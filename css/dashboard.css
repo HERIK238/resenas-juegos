@@ -1,4 +1,4 @@
-/* --- ESTILOS DE LA BARRA DE NAVEGACIÓN --- */
+/* --- NAVBAR STYLES --- */
 .navbar {
     background-color: #072B73;
 }
@@ -29,7 +29,7 @@
     color: white;
 }
 
-/* Botón de usuario circular */
+/* Circular user button */
 .btn-user-login {
     background-color: #F20519;
     border: none;
@@ -68,6 +68,15 @@
     transform: scale(1.1);
 }
 
+.user-profile.hidden {
+    display: none;
+}
+
+.user-profile img {
+    cursor: pointer;
+    object-fit: cover;
+}
+
 .btn-login {
     background-color: #8C030E;
     border-color: #8C030E;
@@ -104,7 +113,7 @@
     color: #8C030E;
 }
 
-/* --- BOTÓN FLOTANTE (+) --- */
+/* --- FLOATING ACTION BUTTON (+) --- */
 .btn-pri {
     background-color: #F20519;
     border: none;
@@ -156,7 +165,7 @@ body {
 
 /* --- MODAL PERSONALIZADO (MANUAL) --- */
 
-/* 1. Fondo oscuro detrás del modal */
+/* 1. Dark overlay behind the modal */
 .custom-modal {
     display: none; /* Oculto por defecto */
     position: fixed;
@@ -177,8 +186,8 @@ body {
 
 /* 2. El "Marco" que define el ANCHO del modal */
 .custom-modal .modal-dialog {
-    width: 500px ;    /* AQUÍ CAMBIAS EL ANCHO (ej: 1000px) */
-    max-width: 95% ;  /* Para que no se rompa en móviles */
+    width: 500px ;    /* CHANGE WIDTH HERE (e.g. 1000px) */
+    max-width: 95% ;  /* Prevent layout break on mobile */
     margin: 0 auto ; /* Centra horizontalmente */   
 }
 
@@ -191,7 +200,7 @@ body {
     box-shadow: 0px 10px 40px rgba(0,0,0,0.6);
     min-height: 400px ; /* Centra horizontalmente */
     width: 100% ; /* Centra horizontalmente */        /* Usa todo el ancho del dialog */
-    max-width: none ; /* Centra horizontalmente */    /* Desbloquea el límite de 500px */
+    max-width: none ; /* Center horizontally */    /* Unlock the 500px limit */
     border: none;
 }
 
@@ -208,6 +217,59 @@ body {
 .custom-modal .modal-title {
     color: #072B73;
     font-weight: bold;
+}
+
+.btn-auth {
+    background-color: #072B73;
+    border-color: #072B73;
+}
+
+.btn-auth:hover {
+    background-color: #094A73;
+    border-color: #094A73;
+    color: white;
+}
+
+.login-help-text {
+    font-size: 0.85rem;
+}
+
+.auth-modal {
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+}
+
+.auth-dialog {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.bubble-modal {
+    background-color: #121212;
+    z-index: 99999;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bubble-modal-title {
+    font-size: 3rem;
+}
+
+.interests-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.btn-pill {
+    border-radius: 50px;
 }
 
 .custom-modal .modal-body {
@@ -231,6 +293,6 @@ body {
 .bubble.selected {
     background-color: #F20519; /* Color rojo */
     font-weight: bold;
-    transform: scale(1.1); /* Efecto de que se hace un poquito más grande */
+    transform: scale(1.1); /* Slight scale-up effect */
     box-shadow: 0 4px 15px rgba(242, 5, 25, 0.5);
 }

@@ -1,14 +1,14 @@
 <?php
-// Requiere el servicio y el modelo
+// Require the service and model
 require_once __DIR__ . '/../services/ModalService.php';
 require_once __DIR__ . '/../models/ModalAuth.php';
 
-// Clase controlador
+// Controller class
 class ModalController {
     private $userService;
     private $userModel;
     
-    // Crea una instancia del servicio de usuario
+    // Create an instance of the user service
     public function __construct() {
         $this->userModel   = new User();
         $this->userService = new UserService($this->userModel);
@@ -16,11 +16,11 @@ class ModalController {
 
     public function create() {
         if ($_SERVER["REQUEST_METHOD"] != "POST") {
-            $this->sendResponse(['status' => 'error', 'message' => 'Método no permitido'], 405);
+            $this->sendResponse(['status' => 'error', 'message' => 'Method not allowed'], 405);
             return;
         }
 
-        // Aquí se reciben los datos enviados por el modal
+        // Here we receive the data sent from the modal
         $username = $_POST['username'] ?? '';
         $documento = $_POST['documento'] ?? '';
         $email    = $_POST['email'] ?? '';
@@ -36,7 +36,7 @@ class ModalController {
             empty($role) ||
             empty($documento)
         ) {
-            $this->sendResponse(['status' => 'error', 'message' => 'Datos incompletos'], 400);
+            $this->sendResponse(['status' => 'error', 'message' => 'Incomplete data'], 400);
             return;
         }
 
@@ -45,9 +45,9 @@ class ModalController {
             $result = $this->userService->createUser($username, $email, $status, $password, $role, $documento);
             $this->sendResponse($result);
         } catch (Exception $e) {
-            // Cambiamos el código de respuesta a 200 para que el callback 'success' de AJAX
-            // pueda procesar el mensaje de error de validación.
-            // Los errores de validación (como "email ya existe") no son errores del servidor.
+            // Change the response code to 200 so the AJAX 'success' callback
+            // can process the validation error message.
+            // Validation errors (like "email already exists") are not server errors.
             $this->sendResponse(['status' => 'error', 'message' => $e->getMessage()], 200);
         }
     }

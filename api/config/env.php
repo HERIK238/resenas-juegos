@@ -1,15 +1,15 @@
 <?php
 // =======================================================
-// 1. CAPA DE SEGURIDAD GLOBAL (Agregado arriba del todo)
+// 1. GLOBAL SECURITY LAYER (Added at the top)
 // =======================================================
 
-// Desactivar visualización de errores al público para no filtrar datos del .env
+// Disable error display to the public so .env data is not leaked
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 ini_set('log_errors', 1);
 error_reporting(E_ALL);
 
-// Iniciar sesión segura si no está activa para el Token CSRF
+// Start a secure session if not already active for CSRF token usage
 if (session_status() === PHP_SESSION_NONE) {
     session_start([
         'cookie_httponly' => true,
@@ -17,13 +17,13 @@ if (session_status() === PHP_SESSION_NONE) {
     ]);
 }
 
-// Crear el token secreto si no existe en la sesión
+// Create the secret token if it does not exist in the session
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
 // =======================================================
-// 2. TU LÓGICA DE ENVLOADER (Se mantiene intacta)
+// 2. YOUR ENVLOADER LOGIC (Remains intact)
 // =======================================================
 class EnvLoader {
     public static function load($path) {

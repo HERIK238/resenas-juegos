@@ -1,17 +1,17 @@
 <?php
-// Requiere el servicio
+// Require the service
 require_once __DIR__ . '/../services/LogoutService.php';
 
-// Clase controlador
+// Controller class
 class LogoutController {
     private $logoutService;
 
-    // Crea una instancia del servicio de logout
+    // Create an instance of the logout service
     public function __construct() {
         $this->logoutService = new LogoutService();
     }
 
-    // Este método maneja la petición HTTP
+    // This method handles the HTTP request
     public function handleRequest() {
         header('Content-Type: application/json');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,18 +19,18 @@ class LogoutController {
             if ($success) {
                 echo json_encode([
                     'status' => 'success', 
-                    'message' => 'Logout exitoso',
+                    'message' => 'Logout successful',
                 ]);    
             } else {
                 echo json_encode([
                     'status' => 'error', 
-                    'message' => 'No se pudo cerrar la sesión',
+                    'message' => 'Could not log out',
                 ]);
             }
         } else {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Método no permitido'
+                'message' => 'Method not allowed'
             ]);
         }
     }
