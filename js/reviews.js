@@ -61,6 +61,10 @@ function loadUserReviews() {
             console.error('Error loading reviews:', error);
             container.innerHTML = '<div class="alert alert-danger">Error loading reviews. Please try again later.</div>';
         });
+
+        function deleteReview() {
+            container.innerHTML = '<input type="checkbox" id="deleteconfirm" class="form-check-input"><label for="confirmDelete" class="form-check-label">Confirm delete</label>';
+        }
 }
 
 function escapeHtml(value) {

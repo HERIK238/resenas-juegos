@@ -1,0 +1,56 @@
+.footer-background,
+#main-content .card,
+#main-content > div:first-child {
+    background-color: rgba(33, 37, 41, 0.8);
+}
+
+.footer-background .nav-link,
+.footer-background p {
+    color: #ffffff !important;
+}
+
+.footer-background .nav-link:hover {
+    color: var(--bs-primary) !important;
+}
+
+.footer-background .nav-link:active {
+    color: #73a9fa !important;
+}
+
+
+#main-content h1,
+#main-content > div > p {
+    color: #ffffff;
+}
+
+#main-content .card {
+    color: #ffffff;
+    border-color:var(--bs-primary) !important;
+}
+
+#main-content > div:first-child {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem; /* .Add some margin to separate it from the cards */
+}
+
+.text-bg-dark .nav-link:not(.active):hover {
+    background-color: #343a40;
+    border: 0.0001px solid #ffffff !important;
+
+}
+
+.text-bg-dark .nav-link:not(.active):active {
+    background-color: #6e7780;
+    border: 0.0001px solid #ffffff !important;
+
+}
+
+.text-bg-dark .nav-link.active:hover {
+    background-color: #141414 !important;
+    border: 0.0001px solid var(--bs-primary);
+}
+.text-bg-dark .nav-link.active:active {
+    background-color: #525252 !important;
+    border: 0.0001px solid var(--bs-primary);
+}
