@@ -258,3 +258,51 @@ window.handleCredentialResponse = function(response) {
         alert("Hubo un problema al procesar el login con Google.");
     });
 };
+
+// ==========================================
+// obtener reseñas 
+// ==========================================
+
+function obtenerReseñas() {
+    fetch("../api/obtener_reseñas.php")
+        .then(response => {
+            if (!response.ok) throw new Error("Error en la conexión con el servidor");
+            return response.json();
+        })
+        .then(data => {
+            // Asegúrate de que el ID en tu HTML sea exactamente "reseñasContaines" (con s al final)
+            const reseñasContainer = document.getElementById("reseñasContaines");
+            
+            if (reseñasContainer) {
+                reseñasContainer.innerHTML = ""; 
+                
+                // Si 'data' es un objeto que contiene una lista en 'data', usa data.data
+                // Si 'data' es directamente el array, usa 'data'
+                const listaReseñas = data.data || data; 
+
+                listaReseñas.forEach(reseña => {
+                    const reseñaElement = document.createElement("div");
+                    reseñaElement.className = "card border-success mb-3";
+                    
+                    // Ajusta estos nombres según los campos que devuelva tu base de datos
+                    reseñaElement.innerHTML = `
+                        <div class="card-header bg-transparent border-success">User: ${reseña.username}</div>
+                        <div class="card-body text-success">
+                            <h5 class="card-title">${reseña.titulo}</h5>
+                            <p class="card-text">${reseña.contenido}</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-success">Created: ${reseña.created_at}</div>
+                    `;
+                    
+                    reseñasContainer.appendChild(reseñaElement);
+                });
+            }
+        })
+        .catch(error => console.error("Error cargando reseñas:", error));
+}
+
+// Para ejecutar la carga al abrir la página
+document.addEventListener("DOMContentLoaded", obtenerReseñas);
+
+// Opcional: Para que se actualice cada 5 segundos
+// setInterval(obtenerReseñas, 5000);

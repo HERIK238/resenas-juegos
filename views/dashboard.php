@@ -118,7 +118,7 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
             <select id="reviewGenre" class="form-select mb-3">
               <option selected disabled value="">Select game genre</option>
             </select>
-            <input id="reviewRating" type="number" min="0" max="10" step="0.5" class="form-control" placeholder="Rating (0-10)" />
+            <!-- <input id="reviewRating" type="number" min="0" max="10" step="0.5" class="form-control" placeholder="Rating (0-10)" /> -->
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btn-cerrar" onclick="document.getElementById('Modal').style.display='none'">Close</button>
@@ -236,6 +236,12 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
 
         <input type="hidden" id="generos_input" name="generos_juego">
     </div>
+
+<div class="container mt-4">
+    <div id="reseñasContaines">
+        </div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script  src="../js/dashboard.js"></script>
