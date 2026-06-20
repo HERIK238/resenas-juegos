@@ -296,3 +296,26 @@ body {
     transform: scale(1.1); /* Slight scale-up effect */
     box-shadow: 0 4px 15px rgba(242, 5, 25, 0.5);
 }
+
+/* --- RESEÑA CARD --- */
+.border-success {
+    max-width: 18rem;
+    border-color: #F20519 !important;
+    background-color: transparent !important;
+}
+
+.card-header {
+    background-color: rgb(0, 0, 0);
+}
+
+.card-title {
+    color: #F20519;
+}
+
+.card-text {
+    color: #8C030E;
+}
+
+.card-footer {
+    background-color: rgb(0, 0, 0);
+}
