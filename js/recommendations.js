@@ -18,6 +18,15 @@ window.openUserHome = function () {
     }
 }
 
+
+window.openUserConfig = function () {
+    try {
+        window.location.href = "../views/settings.php";
+    }catch (error) {
+        console.log("error al abrir la configuracion del usuario:", error)
+    }
+}
+
 window.openUserReviews = function () {
     try {
         window.location.href = "../views/reviews.php";

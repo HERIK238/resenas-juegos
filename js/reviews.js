@@ -18,6 +18,14 @@ window.openUserRecommendations = function () {
     }
 }
 
+window.openUserConfig = function () {
+    try {
+        window.location.href = "../views/settings.php";
+    }catch (error) {
+        console.log("error al abrir la configuracion del usuario:", error)
+    }
+}
+
 function loadUserReviews() {
     const container = document.getElementById('reviewsList');
     if (!container) {
@@ -48,7 +56,6 @@ function loadUserReviews() {
                                 <p class="mb-1">${escapeHtml(review.review_content)}</p>
                                 <small class="text-muted">Game: ${escapeHtml(review.game_title || 'Unknown')}</small>
                             </div>
-                            <span class="badge bg-primary rounded-pill">${review.calificacion ?? 'N/A'}</span>
                         </div>
                         <div class="mt-2">
                             <small class="text-muted">Creada el ${new Date(review.created_at).toLocaleString()}</small>
