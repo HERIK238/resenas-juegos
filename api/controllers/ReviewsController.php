@@ -41,7 +41,6 @@ class ReviewsController {
         $gameName = trim($_POST['game_name'] ?? '');
         $title = trim($_POST['titulo'] ?? '');
         $content = trim($_POST['contenido'] ?? '');
-        $rating = isset($_POST['calificacion']) && $_POST['calificacion'] !== '' ? $_POST['calificacion'] : null;
 
         if (!$gameName) {
             $this->sendResponse(['success' => false, 'message' => 'Game name is required'], 400);
@@ -49,7 +48,7 @@ class ReviewsController {
         }
 
         try {
-            $result = $this->service->saveReview($_SESSION['user_id'], $gameName, $title, $content, $rating);
+            $result = $this->service->saveReview($_SESSION['user_id'], $gameName, $title, $content);
             $this->sendResponse(['success' => true, 'message' => $result['message']]);
         } catch (Exception $e) {
             $this->sendResponse(['success' => false, 'message' => $e->getMessage()], 400);

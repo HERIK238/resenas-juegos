@@ -10,7 +10,7 @@ class ReviewModel {
     }
 
     public function getReviewsByUser($userId) {
-        $sql = "SELECT r.id, r.titulo AS review_title, r.contenido AS review_content, r.calificacion, r.created_at, g.id AS game_id, g.titulo AS game_title, g.descripcion AS game_description, g.portada_url AS game_cover_url
+        $sql = "SELECT r.id, r.titulo AS review_title, r.contenido AS review_content, r.created_at, g.id AS game_id, g.titulo AS game_title, g.descripcion AS game_description, g.portada_url AS game_cover_url
                 FROM reviews r
                 LEFT JOIN games g ON g.id = r.game_id
                 WHERE r.user_id = :user_id
@@ -20,15 +20,14 @@ class ReviewModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createReview($userId, $gameId, $title, $content, $rating = null) {
-        $sql = "INSERT INTO reviews (user_id, game_id, titulo, contenido, calificacion) VALUES (:user_id, :game_id, :titulo, :contenido, :calificacion)";
+    public function createReview($userId, $gameId, $title, $content = null) {
+        $sql = "INSERT INTO reviews (user_id, game_id, titulo, contenido) VALUES (:user_id, :game_id, :titulo, :contenido)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             ':user_id' => $userId,
             ':game_id' => $gameId,
             ':titulo' => $title,
-            ':contenido' => $content,
-            ':calificacion' => $rating
+            ':contenido' => $content
         ]);
         return $this->db->lastInsertId();
     }
@@ -97,12 +96,11 @@ class ReviewModel {
 
     public function getTopRatedGames($limit = 10) {
         $sql = "SELECT g.id, g.titulo, g.descripcion, g.portada_url, g.created_at,
-                       AVG(r.calificacion) AS average_rating,
                        COUNT(r.id) AS review_count
                 FROM games g
                 LEFT JOIN reviews r ON r.game_id = g.id
                 GROUP BY g.id
-                ORDER BY average_rating DESC, review_count DESC, g.created_at DESC
+                ORDER BY review_count DESC, g.created_at DESC
                 LIMIT :limit";
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
