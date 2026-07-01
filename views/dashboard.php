@@ -242,13 +242,13 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
 </div>
 
 <template id="reseñaCardTemplate">
-    <div class="card border-success mb-3">
-        <div class="card-header bg-transparent border-success reseña-username"></div>
-        <div class="card-body text-success">
-            <h5 class="card-title reseña-title"></h5>
-            <p class="card-text reseña-content"></p>
+    <div class="reseña-card mb-3">
+        <div class="reseña-card-header reseña-username"></div>
+        <div class="reseña-card-body">
+            <h5 class="reseña-card-title reseña-title"></h5>
+            <p class="reseña-card-text reseña-content"></p>
         </div>
-        <div class="card-footer bg-transparent border-success reseña-date"></div>
+        <div class="reseña-card-footer reseña-date"></div>
     </div>
 </template>
 
