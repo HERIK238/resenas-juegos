@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // 1. AUTOMATIC CSRF SHIELD: If the request is POST, the token must be present
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' || $_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $headers = getallheaders();
     
     // The token can arrive in the JS header (X-CSRF-TOKEN) or in a normal input ($_POST)

@@ -126,11 +126,21 @@ function fillReviewOptions() {
                     }
                 });
 
-                const genreOptions = uniqueGenres.map(genre => {
-                    return `<option value="${genre.nombre}">${genre.nombre}</option>`;
-                }).join('');
-                if (genreOptions) {
-                    reviewGenreSelect.innerHTML = '<option selected disabled value="">Select game genre</option>' + genreOptions;
+                if (uniqueGenres.length > 0) {
+                    reviewGenreSelect.innerHTML = '';
+                    const placeholder = document.createElement('option');
+                    placeholder.selected = true;
+                    placeholder.disabled = true;
+                    placeholder.value = '';
+                    placeholder.textContent = 'Select game genre';
+                    reviewGenreSelect.appendChild(placeholder);
+
+                    uniqueGenres.forEach(genre => {
+                        const opt = document.createElement('option');
+                        opt.value = genre.nombre;
+                        opt.textContent = genre.nombre;
+                        reviewGenreSelect.appendChild(opt);
+                    });
                 }
             }
         })
