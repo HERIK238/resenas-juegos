@@ -39,7 +39,10 @@ function loadUserReviews() {
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                container.innerHTML = `<div class="alert alert-warning">${data.message || 'Could not load reviews.'}</div>`;
+                const warn = document.createElement('div');
+                warn.className = 'alert alert-warning';
+                warn.textContent = data.message || 'Could not load reviews.';
+                container.replaceChildren(warn);
                 return;
             }
 
@@ -85,7 +88,10 @@ function deleteReview(reviewId) {
 
         fetch('../api/delete_review.php', {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? ''
+            },
             body: JSON.stringify({ review_id: reviewId })
         })
             .then(res => res.json())

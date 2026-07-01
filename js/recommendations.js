@@ -46,7 +46,10 @@ function loadRecommendations() {
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                container.innerHTML = `<div class="alert alert-warning">${data.message || 'Could not load recommendations.'}</div>`;
+                const warn = document.createElement('div');
+                warn.className = 'alert alert-warning';
+                warn.textContent = data.message || 'Could not load recommendations.';
+                container.replaceChildren(warn);
                 return;
             }
 
@@ -95,7 +98,10 @@ function loadCatalog(search = '') {
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                container.innerHTML = `<div class="alert alert-warning">${data.message || 'Could not load the catalog.'}</div>`;
+                const warnCat = document.createElement('div');
+                warnCat.className = 'alert alert-warning';
+                warnCat.textContent = data.message || 'Could not load the catalog.';
+                container.replaceChildren(warnCat);
                 return;
             }
 
