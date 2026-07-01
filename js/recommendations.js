@@ -55,22 +55,22 @@ function loadRecommendations() {
                 return;
             }
 
-            container.innerHTML = data.data.map(game => {
-                return `
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100">
-                            ${game.portada_url ? `<img src="${escapeHtml(game.portada_url)}" class="card-img-top" alt="${escapeHtml(game.titulo)}">` : ''}
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${escapeHtml(game.titulo)}</h5>
-                                <p class="card-text text-truncate">${escapeHtml(game.descripcion ?? 'Sin descripción')}</p>
-                                <div class="mt-auto">
-                                    <small class="text-muted">Creado el ${new Date(game.created_at).toLocaleDateString()}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const template = document.getElementById('recommendationCardTemplate');
+            container.innerHTML = '';
+            data.data.forEach(game => {
+                const clone = template.content.cloneNode(true);
+                const img = clone.querySelector('.game-cover');
+                if (game.portada_url) {
+                    img.src = game.portada_url;
+                    img.alt = game.titulo;
+                } else {
+                    img.remove();
+                }
+                clone.querySelector('.game-title').textContent = game.titulo;
+                clone.querySelector('.game-description').textContent = game.descripcion ?? 'Sin descripción';
+                clone.querySelector('.game-date').textContent = `Creado el ${new Date(game.created_at).toLocaleDateString()}`;
+                container.appendChild(clone);
+            });
         })
         .catch(error => {
             console.error('Error loading recommendations:', error);
@@ -105,19 +105,21 @@ function loadCatalog(search = '') {
                 return;
             }
 
-            container.innerHTML = games.map(game => {
-                return `
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100">
-                            ${game.portada_url ? `<img src="${escapeHtml(game.portada_url)}" class="card-img-top" alt="${escapeHtml(game.titulo)}">` : ''}
-                            <div class="card-body">
-                                <h5 class="card-title">${escapeHtml(game.titulo)}</h5>
-                                <p class="card-text text-truncate">${escapeHtml(game.descripcion ?? 'Sin descripción')}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const template = document.getElementById('catalogCardTemplate');
+            container.innerHTML = '';
+            games.forEach(game => {
+                const clone = template.content.cloneNode(true);
+                const img = clone.querySelector('.game-cover');
+                if (game.portada_url) {
+                    img.src = game.portada_url;
+                    img.alt = game.titulo;
+                } else {
+                    img.remove();
+                }
+                clone.querySelector('.game-title').textContent = game.titulo;
+                clone.querySelector('.game-description').textContent = game.descripcion ?? 'Sin descripción';
+                container.appendChild(clone);
+            });
         })
         .catch(error => {
             console.error('Error loading the catalog:', error);
@@ -125,14 +127,3 @@ function loadCatalog(search = '') {
         });
 }
 
-function escapeHtml(value) {
-    if (typeof value !== 'string') {
-        return value;
-    }
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}

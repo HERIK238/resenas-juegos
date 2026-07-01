@@ -1,8 +1,28 @@
+.review-item {
+    transition: background-color 0.2s ease;
+}
+
+.review-item:hover {
+    background-color: #f8f9fa;
+}
+
+.review-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.review-title {
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.review-body {
+    word-break: break-word;
+}
+
 .btn-delete {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
+    background-color: #15A0BF;
+    border: none;
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -11,6 +31,13 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    margin-left: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: #094A73;
 }
 
 .btn-delete img {

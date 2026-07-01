@@ -274,27 +274,17 @@ function obtenerReseñas() {
             const reseñasContainer = document.getElementById("reseñasContaines");
             
             if (reseñasContainer) {
-                reseñasContainer.innerHTML = ""; 
-                
-                // Si 'data' es un objeto que contiene una lista en 'data', usa data.data
-                // Si 'data' es directamente el array, usa 'data'
-                const listaReseñas = data.data || data; 
+                reseñasContainer.innerHTML = '';
+                const listaReseñas = data.data || data;
+                const template = document.getElementById('reseñaCardTemplate');
 
                 listaReseñas.forEach(reseña => {
-                    const reseñaElement = document.createElement("div");
-                    reseñaElement.className = "card border-success mb-3";
-                    
-                    // Ajusta estos nombres según los campos que devuelva tu base de datos
-                    reseñaElement.innerHTML = `
-                        <div class="card-header bg-transparent border-success">User: ${reseña.username}</div>
-                        <div class="card-body text-success">
-                            <h5 class="card-title">${reseña.titulo}</h5>
-                            <p class="card-text">${reseña.contenido}</p>
-                        </div>
-                        <div class="card-footer bg-transparent border-success">Created: ${reseña.created_at}</div>
-                    `;
-                    
-                    reseñasContainer.appendChild(reseñaElement);
+                    const clone = template.content.cloneNode(true);
+                    clone.querySelector('.reseña-username').textContent = `User: ${reseña.username}`;
+                    clone.querySelector('.reseña-title').textContent = reseña.titulo;
+                    clone.querySelector('.reseña-content').textContent = reseña.contenido;
+                    clone.querySelector('.reseña-date').textContent = `Created: ${reseña.created_at}`;
+                    reseñasContainer.appendChild(clone);
                 });
             }
         })

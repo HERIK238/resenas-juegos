@@ -238,9 +238,19 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
     </div>
 
 <div class="container mt-4">
-    <div id="reseñasContaines">
-        </div>
+    <div id="reseñasContaines"></div>
 </div>
+
+<template id="reseñaCardTemplate">
+    <div class="card border-success mb-3">
+        <div class="card-header bg-transparent border-success reseña-username"></div>
+        <div class="card-body text-success">
+            <h5 class="card-title reseña-title"></h5>
+            <p class="card-text reseña-content"></p>
+        </div>
+        <div class="card-footer bg-transparent border-success reseña-date"></div>
+    </div>
+</template>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
