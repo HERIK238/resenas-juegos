@@ -18,6 +18,7 @@ window.openUserRecommendations = function () {
     }
 }
 
+
 window.openUserConfig = function () {
     try {
         window.location.href = "../views/settings.php";
@@ -47,41 +48,59 @@ function loadUserReviews() {
                 return;
             }
 
-            container.innerHTML = data.data.map(review => {
-                return `
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h5 class="mb-1">${escapeHtml(review.review_title)}</h5>
-                                <p class="mb-1">${escapeHtml(review.review_content)}</p>
-                                <small class="text-muted">Game: ${escapeHtml(review.game_title || 'Unknown')}</small>
-                            </div>
-                        </div>
-                        <div class="mt-2">
-                            <small class="text-muted">Creada el ${new Date(review.created_at).toLocaleString()}</small>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const template = document.getElementById('reviewTemplate');
+            container.innerHTML = '';
+            data.data.forEach(review => {
+                const clone = template.content.cloneNode(true);
+                const item = clone.querySelector('.review-item');
+
+                item.id = `review-${review.id}`;
+                clone.querySelector('.review-title').textContent = review.review_title;
+                clone.querySelector('.review-body').textContent = review.review_content;
+                clone.querySelector('.review-game').textContent = `Game: ${review.game_title || 'Unknown'}`;
+                clone.querySelector('.review-date').textContent = `Creada el ${new Date(review.created_at).toLocaleString()}`;
+                clone.querySelector('.review-delete-btn').addEventListener('click', () => deleteReview(review.id));
+
+                container.appendChild(clone);
+            });
         })
         .catch(error => {
             console.error('Error loading reviews:', error);
             container.innerHTML = '<div class="alert alert-danger">Error loading reviews. Please try again later.</div>';
         });
-
-        function deleteReview() {
-            container.innerHTML = '<input type="checkbox" id="deleteconfirm" class="form-check-input"><label for="confirmDelete" class="form-check-label">Confirm delete</label>';
-        }
 }
 
-function escapeHtml(value) {
-    if (typeof value !== 'string') {
-        return value;
-    }
-    return value
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+function deleteReview(reviewId) {
+    Swal.fire({
+        title: '¿Eliminar reseña?',
+        text: 'Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then(result => {
+        if (!result.isConfirmed) return;
+
+        fetch('../api/delete_review.php', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ review_id: reviewId })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById(`review-${reviewId}`)?.remove();
+                    const container = document.getElementById('reviewsList');
+                    if (container && !container.querySelector('.review-item')) {
+                        container.innerHTML = '<div class="alert alert-info">No reviews found.</div>';
+                    }
+                    Swal.fire('Eliminada', 'La reseña fue eliminada.', 'success');
+                } else {
+                    Swal.fire('Error', data.message || 'No se pudo eliminar.', 'error');
+                }
+            })
+            .catch(() => Swal.fire('Error', 'Error de conexión.', 'error'));
+    });
 }

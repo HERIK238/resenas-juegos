@@ -9,6 +9,7 @@
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link rel="stylesheet" href="../dist/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../dist/sweetalert2/css/sweetalert2.min.css">
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/reviews.css">
     <link rel="icon" type="image/png" href="../assets/logo.png">
@@ -100,12 +101,27 @@
         <div id="reviewsList" class="list-group"></div>
     </main>
 
-    <div class="container btn-container">
-        <button class="btn btn-delete" id="btn-delete" onclick="deleteReview()"><img src="../assets/imagenes/basura.png" alt="Delete"></button>
-    </div>
+    <template id="reviewTemplate">
+        <div class="list-group-item review-item">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="review-info">
+                    <h5 class="mb-1 review-title"></h5>
+                    <p class="mb-1 review-body"></p>
+                    <small class="text-muted review-game"></small>
+                </div>
+                <button class="btn btn-delete review-delete-btn" title="Eliminar reseña">
+                    <img src="../assets/imagenes/basura.png" alt="Delete">
+                </button>
+            </div>
+            <div class="mt-2">
+                <small class="text-muted review-date"></small>
+            </div>
+        </div>
+    </template>
 
     <script src="../js/main.js"></script>
     <script src="../dist/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../dist/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script src="../js/reviews.js"></script>
 </body>
 </html>

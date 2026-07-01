@@ -110,6 +110,33 @@
         </section>
     </main>
 
+    <template id="recommendationCardTemplate">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+                <img class="card-img-top game-cover" alt="">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title game-title"></h5>
+                    <p class="card-text text-truncate game-description"></p>
+                    <div class="mt-auto">
+                        <small class="text-muted game-date"></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="catalogCardTemplate">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+                <img class="card-img-top game-cover" alt="">
+                <div class="card-body">
+                    <h5 class="card-title game-title"></h5>
+                    <p class="card-text text-truncate game-description"></p>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <script src="../js/main.js"></script>
     <script src="../dist/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../js/recommendations.js"></script>
