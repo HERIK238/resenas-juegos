@@ -1,11 +1,11 @@
-authoreo Game 🎮 Reviews
+# Game Reviews 🎮
 
 [![PHP](https://img.shields.io/badge/PHP-8%2B-777BB4?style=flat&logo=php)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
-A web platform for creating and sharing video game reviews with **Google OAuth** authentication, user management, and a scalable database.
+A web platform for creating and sharing video game reviews with **Google OAuth** authentication, personalized recommendations, and a scalable MVC backend.
 
 ---
 
@@ -14,22 +14,25 @@ A web platform for creating and sharing video game reviews with **Google OAuth**
 - 🔐 **Full Authentication**
   - User registration and login
   - Google OAuth 2.0 integration
-  - Secure session management
+  - Secure session management with CSRF protection
 
 - 📝 **Reviews System**
-  - Create, edit, and delete reviews
-  - Game ratings
-  - Personalized user dashboard
+  - Create and delete personal reviews
+  - Personalized user dashboard showing all reviews
+  - Per-card delete confirmation with SweetAlert2
 
-- 🎨 **Modern UI/UX**
-  - Responsive interface with Bootstrap 5
-  - Font Awesome icons
-  - AOS animations (Animate On Scroll)
+- 🎯 **Recommendations**
+  - Game recommendations based on user preferred genres
+  - Full game catalog with search
+
+- ⚙️ **Settings**
+  - User profile configuration
 
 - 🗄️ **Robust Backend**
-  - RESTful PHP API
+  - RESTful PHP API with MVC architecture
   - Normalized MySQL database
-  - Server-side and client-side validation
+  - PDO prepared statements (SQL injection protection)
+  - XSS protection via textContent and server-side escaping
 
 ---
 
@@ -41,7 +44,7 @@ A web platform for creating and sharing video game reviews with **Google OAuth**
 | **Database** | MySQL |
 | **Frontend** | HTML5, CSS3, JavaScript |
 | **UI Framework** | Bootstrap 5 |
-| **Libraries** | jQuery, DataTables, Chart.js, SweetAlert2, Toastr |
+| **Libraries** | SweetAlert2, Bootstrap Icons |
 | **Authentication** | Google OAuth 2.0 |
 
 ---
@@ -101,10 +104,16 @@ A web platform for creating and sharing video game reviews with **Google OAuth**
 ### Reviews
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/reviews.php` | GET | List all reviews |
-| `/api/review_create.php` | POST | Create a new review |
-| `/api/review_edit.php` | PUT | Edit a review |
-| `/api/review_delete.php` | DELETE | Delete a review |
+| `/api/reviews.php` | GET | List user reviews |
+| `/api/reviews.php` | POST | Create a new review |
+| `/api/delete_review.php` | DELETE | Delete a review |
+| `/api/obtener_reseñas.php` | GET | Get all public reviews |
+
+### Catalog & Recommendations
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/catalog.php` | GET | List games and genres |
+| `/api/recommendations.php` | GET | Get personalized recommendations |
 
 ---
 
@@ -114,25 +123,72 @@ A web platform for creating and sharing video game reviews with **Google OAuth**
 reseñas-juegos/
 ├── api/
 │   ├── config/
-│   │   ├── .env.example
-│   │   └── db.php
+│   │   ├── .env
+│   │   ├── .htaccess
+│   │   ├── csrf_check.php
+│   │   ├── db.php
+│   │   └── env.php
+│   ├── controllers/
+│   │   ├── AuthController.php
+│   │   ├── DeleteReviewController.php
+│   │   ├── ListUserController.php
+│   │   ├── LogoutController.php
+│   │   ├── ModalController.php
+│   │   ├── obtener_reseñaController.php
+│   │   └── ReviewsController.php
+│   ├── models/
+│   │   ├── DeleteReviewModel.php
+│   │   ├── ModalAuth.php
+│   │   ├── obtener_reseñaModels.php
+│   │   ├── ReviewsModels.php
+│   │   ├── UserAuth.php
+│   │   └── UserList.php
+│   ├── services/
+│   │   ├── AuthService.php
+│   │   ├── DeleteReviewService.php
+│   │   ├── LogoutService.php
+│   │   ├── ModalService.php
+│   │   ├── obtener_reseñaService.php
+│   │   ├── ReviewsService.php
+│   │   └── UserListService.php
+│   ├── middleware/
+│   │   └── auth.php
+│   ├── core/
+│   │   └── DBConfig.php
 │   ├── auth_user.php
-│   ├── reg_user.php
+│   ├── catalog.php
+│   ├── check_session.php
+│   ├── delete_review.php
 │   ├── google_login.php
-│   └── ...
+│   ├── logout.php
+│   ├── obtener_reseñas.php
+│   ├── recommendations.php
+│   ├── reg_user.php
+│   └── reviews.php
 ├── views/
-│   ├── home.php
 │   ├── dashboard.php
-│   └── ...
+│   ├── recommendations.php
+│   ├── reviews.php
+│   └── settings.php
 ├── css/
-│   └── style.css
+│   ├── dashboard.css
+│   ├── reviews.css
+│   └── settings.css
 ├── js/
+│   ├── dashboard.js
 │   ├── main.js
-│   └── dashboard.js
+│   ├── recommendations.js
+│   ├── reviews.js
+│   └── settings.js
+├── assets/
+│   ├── logo.png
+│   ├── fonts/
+│   ├── icons/
+│   ├── imagenes/
+│   └── sounds/
 ├── dist/
 │   ├── bootstrap/
-│   ├── jquery/
-│   ├── datatables/
+│   ├── sweetalert2/
 │   └── ...
 └── README.md
 ```
@@ -143,15 +199,17 @@ reseñas-juegos/
 
 - ✅ Sensitive variables stored in `.env` (never in git)
 - ✅ Passwords hashed with bcrypt
-- ✅ Input validation on all endpoints
-- ✅ CSRF and SQL injection protection
-- ✅ Debug logs excluded from the repository
+- ✅ PDO prepared statements against SQL injection
+- ✅ CSRF protection on POST and DELETE requests
+- ✅ XSS prevention with textContent and server-side escaping
+- ✅ Sessions with HttpOnly cookies and SameSite=Lax
+- ✅ Error display disabled in production
 
 ---
 
 ## 📋 Roadmap
 
-- [ ] Add a ratings system
+- [ ] Edit reviews
 - [ ] Add advanced search and filters
 - [ ] Create admin statistics dashboard
 - [ ] Add comments to reviews
@@ -167,11 +225,6 @@ reseñas-juegos/
 4. Push to the branch (`git push origin feature/new-feature`)
 5. Open a Pull Request
 
-Please include:
-- A clear description of the changes
-- Steps to reproduce (if fixing a bug)
-- Screenshots (if applicable)
-
 ---
 
 ## 📄 License
@@ -183,7 +236,7 @@ This project is licensed under MIT. See the `LICENSE` file for details.
 ## 👨‍💻 Author
 
 **HERIK**  
-📧 Contact: herikbernalgomez@gmail.com
+📧 Contact: herikbernalgomez@gmail.com  
 🔗 GitHub: [@HERIK238](https://github.com/HERIK238)
 
 ---
