@@ -298,24 +298,49 @@ body {
 }
 
 /* --- RESEÑA CARD --- */
-.border-success {
+.reseña-card {
+    background: rgba(7, 43, 115, 0.5);
+    border: 1px solid #15A0BF;
+    border-radius: 12px;
+    overflow: hidden;
     max-width: 18rem;
-    border-color: #F20519 !important;
-    background-color: transparent !important;
+    backdrop-filter: blur(6px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card-header {
-    background-color: rgb(0, 0, 0);
+.reseña-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(21, 160, 191, 0.25);
 }
 
-.card-title {
-    color: #F20519;
+.reseña-card-header {
+    background-color: rgba(9, 74, 115, 0.6);
+    border-bottom: 1px solid #15A0BF;
+    padding: 0.6rem 1rem;
+    color: #15A0BF;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
-.card-text {
-    color: #8C030E;
+.reseña-card-body {
+    padding: 1rem;
 }
 
-.card-footer {
-    background-color: rgb(0, 0, 0);
+.reseña-card-title {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.reseña-card-text {
+    color: #cce6f4;
+    margin-bottom: 0;
+}
+
+.reseña-card-footer {
+    background-color: rgba(9, 74, 115, 0.6);
+    border-top: 1px solid #15A0BF;
+    padding: 0.5rem 1rem;
+    color: #8ab8d4;
+    font-size: 0.8rem;
 }
