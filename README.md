@@ -195,6 +195,13 @@ reseñas-juegos/
 
 ---
 
+## 📌 Note about `data` (admin page)
+
+The application includes an admin page `views/data.php` that shows the list of users and the count of reviews per user. This page and its navbar link are visible only to administrator users (those with `role_id = 1`).
+
+Recommendation: in addition to hiding the link in the UI, endpoints that serve this data should validate the role on the server to ensure security.
+
+
 ## 🔒 Security
 
 - ✅ Sensitive variables stored in `.env` (never in git)
@@ -211,7 +218,6 @@ reseñas-juegos/
 
 - [ ] Edit reviews
 - [ ] Add advanced search and filters
-- [ ] Create admin statistics dashboard
 - [ ] Add comments to reviews
 - [ ] Add email notifications
 
