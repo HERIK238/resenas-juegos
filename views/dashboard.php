@@ -34,6 +34,12 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#" id="reviewsLink" onclick="window.openUserReviews()">reviews</a></li>
             <li class="nav-item"><a class="nav-link" href="#" id="recommendationsLink" onclick="window.openUserRecommendations()">recommendations</a></li>
+            <?php
+            if (session_status() === PHP_SESSION_NONE) session_start();
+            if (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === 1):
+            ?>
+                <li class="nav-item"><a class="nav-link" href="data.php" id="dataLink">data</a></li>
+            <?php endif; ?>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 catalog

@@ -95,6 +95,8 @@ try {
     $_SESSION['username'] = $username;
     $_SESSION['email'] = $email;
     $_SESSION['logged_in'] = true;
+    // New users get role_id = 2 by default; store it in session
+    $_SESSION['role_id'] = 2;
 
     echo json_encode(['status' => 'success', 'message' => 'Usuario registrado exitosamente.', 'user_id' => $user_id]);
 } catch (PDOException $e) {

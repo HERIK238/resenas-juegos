@@ -143,6 +143,8 @@ try {
     $_SESSION['username'] = $user['username'] ?? $username;
     $_SESSION['profile_picture'] = $picture;
     $_SESSION['logged_in'] = true;
+    // Ensure role_id is present in session (use DB value if available, otherwise default to 2)
+    $_SESSION['role_id'] = isset($user['role_id']) ? (int)$user['role_id'] : 2;
     
     echo json_encode([
         'status' => 'success',

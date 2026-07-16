@@ -20,7 +20,9 @@ class AuthService {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['email'] = $user['email'];
-        $_SESSION['rol'] = $user['role_id'];
+        // Normalize session key for role
+        $_SESSION['role_id'] = $user['role_id'];
+        $_SESSION['profile_picture'] = $user['profile_picture'] ?? '';
 
         return [
             'status' => 'success',
