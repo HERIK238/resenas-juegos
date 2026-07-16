@@ -107,11 +107,11 @@ function verificarSesion() {
 
             const dropdownUsername = document.getElementById("dropdownUsername");
             if (dropdownUsername) dropdownUsername.textContent = data.username;
-                if (data.profile_picture && profilePic) {
-                    profilePic.src = data.profile_picture;
+                if (profilePic) {
                     profilePic.style.display = "block";
-                } else if (profilePic) {
-                    profilePic.style.display = "none";
+                    profilePic.src = data.profile_picture && data.profile_picture.trim()
+                        ? data.profile_picture
+                        : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' rx='20' fill='%23F20519'/><text x='50%' y='54%' font-size='18' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif'>U</text></svg>";
                 }
             }
         } else {

@@ -35,6 +35,14 @@ window.openUserReviews = function () {
     }
 }
 
+window.openUserData = function () {
+    try {
+        window.location.href = "../views/data.php";
+    } catch (error) {
+        console.error("Error al abrir datos del usuario:", error);
+    }
+}
+
 function loadRecommendations() {
     const container = document.getElementById('recommendationsList');
     if (!container) {

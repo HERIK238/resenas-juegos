@@ -24,3 +24,11 @@ window.openUserHome = function (){
         console.error("error al abrir home del usuario:", error)
     }
 }
+
+window.openUserData = function () {
+    try {
+        window.location.href = "../views/data.php";
+    } catch (error) {
+        console.error("Error al abrir datos del usuario:", error);
+    }
+}
