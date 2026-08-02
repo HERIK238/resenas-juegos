@@ -106,6 +106,12 @@
 
     <main class="container py-4">
         <h1 class="mb-4">My reviews</h1>
+        <div id="reviewsStatus" class="mb-3">
+            <div id="reviewsSpinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="reviewsMessage" class="alert d-none" role="alert"></div>
+        </div>
         <div id="reviewsList" class="list-group"></div>
     </main>
 
@@ -117,9 +123,14 @@
                     <p class="mb-1 review-body"></p>
                     <small class="text-muted review-game"></small>
                 </div>
-                <button class="btn btn-delete review-delete-btn" title="Eliminar reseña">
-                    <img src="../assets/imagenes/basura.png" alt="Delete">
-                </button>
+                <div class="review-actions d-flex flex-column align-items-center ms-2">
+                    <button class="btn btn-delete review-delete-btn" title="Eliminar reseña">
+                        <img src="../assets/imagenes/basura.png" alt="Delete">
+                    </button>
+                    <button class="btn btn-edit review-edit-btn mt-2" title="Editar reseña">
+                        <img src="../assets/imagenes/editar.png" alt="edit">
+                    </button>
+                </div>
             </div>
             <div class="mt-2">
                 <small class="text-muted review-date"></small>

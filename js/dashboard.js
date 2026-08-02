@@ -6,9 +6,8 @@
 window.openModal = function() {
     const modalEl = document.getElementById("Modal");
     if (modalEl) {
-        modalEl.style.display = "flex";
         modalEl.classList.add("show");
-        document.body.style.overflow = "hidden";
+        document.body.classList.add('no-scroll');
     }
 };
 
@@ -17,9 +16,8 @@ window.openLogin = function() {
     const modalLogin = document.getElementById("ModalLogin");
     if (modalLogin) {
         window.closeRegistro(); // Cerramos registro por si estaba abierto
-        modalLogin.style.display = "flex";
         modalLogin.classList.add("show");
-        document.body.style.overflow = "hidden";
+        document.body.classList.add('no-scroll');
     }
 };
 
@@ -28,9 +26,8 @@ window.openRegistro = function() {
     const modalRegistro = document.getElementById("ModalRegistro");
     if (modalRegistro) {
         window.closeLogin(); // Cerramos login para que aparezca el de registro
-        modalRegistro.style.display = "flex";
         modalRegistro.classList.add("show");
-        document.body.style.overflow = "hidden";
+        document.body.classList.add('no-scroll');
     }
 };
 
@@ -41,27 +38,24 @@ window.openRegistro = function() {
 window.closeModal = function() {
     const modalEl = document.getElementById("Modal");
     if (modalEl) {
-        modalEl.style.display = "none";
         modalEl.classList.remove("show");
-        document.body.style.overflow = "";
+        document.body.classList.remove('no-scroll');
     }
 };
 
 window.closeLogin = function() {
     const modalLogin = document.getElementById("ModalLogin");
     if (modalLogin) {
-        modalLogin.style.display = "none";
         modalLogin.classList.remove("show");
-        document.body.style.overflow = "";
+        document.body.classList.remove('no-scroll');
     }
 };
 
 window.closeRegistro = function() {
     const modalRegistro = document.getElementById("ModalRegistro");
     if (modalRegistro) {
-        modalRegistro.style.display = "none";
         modalRegistro.classList.remove("show");
-        document.body.style.overflow = "";
+        document.body.classList.remove('no-scroll');
     }
 };
 

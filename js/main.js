@@ -101,14 +101,13 @@ function verificarSesion() {
         
         if (data.logged) {
             console.log("User authenticated. Active session found.");
-            if (btnUserLogin) btnUserLogin.style.display = "none";
+            if (btnUserLogin) btnUserLogin.classList.add('d-none');
             if (userProfile) {
-                userProfile.style.display = "flex";
+                userProfile.classList.remove('hidden');
 
-            const dropdownUsername = document.getElementById("dropdownUsername");
-            if (dropdownUsername) dropdownUsername.textContent = data.username;
+                const dropdownUsername = document.getElementById("dropdownUsername");
+                if (dropdownUsername) dropdownUsername.textContent = data.username;
                 if (profilePic) {
-                    profilePic.style.display = "block";
                     profilePic.src = data.profile_picture && data.profile_picture.trim()
                         ? data.profile_picture
                         : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' rx='20' fill='%23F20519'/><text x='50%' y='54%' font-size='18' text-anchor='middle' fill='%23fff' font-family='Arial,sans-serif'>U</text></svg>";
@@ -116,8 +115,8 @@ function verificarSesion() {
             }
         } else {
             console.log("Browsing as Guest.");
-            if (btnUserLogin) btnUserLogin.style.display = "inline-flex";
-            if (userProfile) userProfile.style.display = "none";
+            if (btnUserLogin) btnUserLogin.classList.remove('d-none');
+            if (userProfile) userProfile.classList.add('hidden');
             evaluarMostrarBurbujas();
         }
     })
@@ -156,8 +155,7 @@ function evaluarMostrarBurbujas() {
         const modalBurbujas = document.getElementById("ModalBurbujas");
         if (modalBurbujas) {
             modalBurbujas.classList.add("show");
-            modalBurbujas.style.display = "flex";
-            document.body.style.overflow = "hidden";
+            document.body.classList.add('no-scroll');
         }
     }
 }
@@ -175,8 +173,7 @@ function finalizarSeleccionInvitado() {
     const modalBurbujas = document.getElementById("ModalBurbujas");
     if (modalBurbujas) {
         modalBurbujas.classList.remove("show");
-        modalBurbujas.style.display = "none";
-        document.body.style.overflow = "";
+        document.body.classList.remove('no-scroll');
     }
 }
 
@@ -240,9 +237,9 @@ window.handleCredentialResponse = function(response) {
             const userProfile = document.getElementById("userProfile");
             const profilePic = document.getElementById("profilePic");
             
-            if (btnUserLogin) btnUserLogin.style.display = "none";
+            if (btnUserLogin) btnUserLogin.classList.add('d-none');
             if (userProfile) {
-                userProfile.style.display = "flex";
+                userProfile.classList.remove('hidden');
                 if (data.profile_picture && profilePic) {
                     profilePic.src = data.profile_picture;
                 }
@@ -259,6 +256,9 @@ window.handleCredentialResponse = function(response) {
     });
 };
 
+// En obtenerReseñas no construimos los bloques con HTML en JS.
+// Aquí se clona un template ya definido en el HTML y solo se rellenan los datos.
+// La apariencia debe mantenerse en la vista y en los estilos.
 // ==========================================
 // obtener reseñas 
 // ==========================================

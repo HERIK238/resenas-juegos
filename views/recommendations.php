@@ -103,6 +103,12 @@
 
     <main class="container py-4">
         <h1 class="mb-4">Recommendations</h1>
+        <div id="recommendationsStatus" class="mb-3">
+            <div id="recommendationsSpinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div id="recommendationsMessage" class="alert d-none" role="alert"></div>
+        </div>
         <div id="recommendationsList" class="row gy-4"></div>
 
         <section class="mt-5">
@@ -111,6 +117,12 @@
                 <div class="w-50">
                     <input id="catalogSearch" type="search" class="form-control" placeholder="Search games or genre" />
                 </div>
+            </div>
+            <div id="catalogStatus" class="mb-3">
+                <div id="catalogSpinner" class="spinner-border text-primary d-none" role="status">
+                    <span class="visually-hidden">Loading catalog...</span>
+                </div>
+                <div id="catalogMessage" class="alert d-none" role="alert"></div>
             </div>
             <div id="catalogList" class="row gy-4"></div>
         </section>

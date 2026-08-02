@@ -36,39 +36,84 @@ window.openUserRecommendations = function () {
 }
 
 // Carga usuarios desde la API y luego inicializa DataTables
+function showDataStatus(type, text) {
+    const spinner = document.getElementById('dataSpinner');
+    const message = document.getElementById('dataMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    if (type === 'loading') {
+        spinner.classList.remove('d-none');
+        message.classList.add('d-none');
+        message.textContent = '';
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.className = `alert alert-${type}`;
+    message.textContent = text;
+    message.classList.remove('d-none');
+}
+
+function hideDataStatus() {
+    const spinner = document.getElementById('dataSpinner');
+    const message = document.getElementById('dataMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.classList.add('d-none');
+}
+
 function loadUserData() {
     const table = $('#myTable');
     const tbody = table.find('tbody');
+    const tbodyEl = tbody[0];
+    if (!tbodyEl) {
+        return;
+    }
+
+    const template = document.getElementById('userRowTemplate');
+    if (!template) {
+        console.error('User row template not found.');
+        return;
+    }
+
+    showDataStatus('loading', 'Loading user data...');
+    tbodyEl.innerHTML = '';
 
     fetch('../api/data_user.php')
         .then(res => res.json())
         .then(resp => {
             console.log('data_user response:', resp);
 
-            // Manejar varias formas de respuesta de la API
             const isSuccess = resp && (resp.status === 'success' || resp.success === true);
             const dataArray = Array.isArray(resp.data) ? resp.data : (Array.isArray(resp) ? resp : null);
 
             if (!isSuccess || !dataArray) {
-                const msg = resp && (resp.message || resp.error || resp.msg || resp.message_error) ? (resp.message || resp.error || resp.msg || resp.message_error) : 'No se pudo obtener la información de usuarios.';
-                tbody.html(`<tr><td colspan="3">${msg}</td></tr>`);
+                const msg = resp && (resp.message || resp.error || resp.msg || resp.message_error)
+                    ? (resp.message || resp.error || resp.msg || resp.message_error)
+                    : 'No se pudo obtener la información de usuarios.';
+                showDataStatus('warning', msg);
                 return;
             }
 
-            // Construir filas
-            const rows = resp.data.map(u => {
-                const id = u.id ?? '';
-                const username = u.nombre ?? '';
-                const email = u.email ?? '';
-                const total = u.total_reseñas ?? u.total_resenas ?? 0;
-                return `<tr><td>${id}</td><td>${username}</td><td>${email}</td><td>${total}</td></tr>`;
-            }).join('');
+            const rows = dataArray.map(u => {
+                // Clonamos una fila del template definido en el HTML y luego rellenamos sus datos.
+                const clone = template.content.cloneNode(true);
+                clone.querySelector('.user-id').textContent = u.id ?? '';
+                clone.querySelector('.user-name').textContent = u.nombre ?? '';
+                clone.querySelector('.user-email').textContent = u.email ?? '';
+                clone.querySelector('.user-total').textContent = u.total_reseñas ?? u.total_resenas ?? 0;
+                return clone;
+            });
 
-            tbody.html(rows);
+            tbodyEl.replaceChildren(...rows);
+            hideDataStatus();
 
-            // Inicializar DataTable después de poblar
             if ($.fn.DataTable) {
-                // Si ya estaba inicializada, destruirla primero
                 if ($.fn.dataTable.isDataTable(table)) {
                     table.DataTable().clear().destroy();
                 }
@@ -96,7 +141,7 @@ function loadUserData() {
         })
         .catch(err => {
             console.error('Error cargando usuarios:', err);
-            tbody.html('<tr><td colspan="3">Error al cargar datos. Intenta más tarde.</td></tr>');
+            showDataStatus('danger', 'Error al cargar datos. Intenta más tarde.');
         });
 }
 

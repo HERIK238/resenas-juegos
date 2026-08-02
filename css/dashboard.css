@@ -184,6 +184,10 @@ body {
     display: flex ; /* Centra horizontalmente */    
 }
 
+.no-scroll {
+    overflow: hidden !important;
+}
+
 /* 2. El "Marco" que define el ANCHO del modal */
 .custom-modal .modal-dialog {
     width: 500px ;    /* CHANGE WIDTH HERE (e.g. 1000px) */

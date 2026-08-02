@@ -180,6 +180,13 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
         </div>
     </div>
 
+<div id="dataStatus" class="mb-3">
+    <div id="dataSpinner" class="spinner-border text-primary d-none" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <div id="dataMessage" class="alert d-none" role="alert"></div>
+</div>
+
 <table id="myTable" class="display">
     <thead>
         <tr>
@@ -189,27 +196,17 @@ $google_client_id = EnvLoader::get('GOOGLE_CLIENT_ID', '');
             <th>reseñas</th>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-            <td>Row 1 Data 1</td>
-            <td>Row 1 Data 2</td>
-            <td>Row 1 Data 3</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Row 2 Data 1</td>
-            <td>Row 2 Data 2</td>
-            <td>Row 2 Data 3</td>
-            <td>0</td>
-        </tr>
-        <tr>
-            <td>Row 3 Data 1</td>
-            <td>Row 3 Data 2</td>
-            <td>Row 3 Data 3</td>
-            <td>0</td>
-        </tr>
-    </tbody>
+    <tbody></tbody>
 </table>
+
+<template id="userRowTemplate">
+    <tr>
+        <td class="user-id"></td>
+        <td class="user-name"></td>
+        <td class="user-email"></td>
+        <td class="user-total"></td>
+    </tr>
+</template>
 
     <script src="../dist/jquery/js/jquery.min.js"></script>
     <script src="../dist/bootstrap/js/bootstrap.bundle.min.js"></script>

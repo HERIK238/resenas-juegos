@@ -3,8 +3,6 @@
 [![PHP](https://img.shields.io/badge/PHP-8%2B-777BB4?style=flat&logo=php)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-005C84?style=flat&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap&logoColor=white)](https://getbootstrap.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
-
 A web platform for creating and sharing video game reviews with **Google OAuth** authentication, personalized recommendations, and a scalable MVC backend.
 
 ---
@@ -233,13 +231,7 @@ Recommendation: in addition to hiding the link in the UI, endpoints that serve t
 
 ---
 
-## 📄 License
-
-This project is licensed under MIT. See the `LICENSE` file for details.
-
----
-
-## 👨‍💻 Author
+## ‍💻 Author
 
 **HERIK**  
 📧 Contact: herikbernalgomez@gmail.com  
