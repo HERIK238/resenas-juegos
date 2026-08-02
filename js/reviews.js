@@ -35,33 +35,65 @@ window.openUserData = function () {
     }
 }
 
+function showReviewStatus(type, text) {
+    const spinner = document.getElementById('reviewsSpinner');
+    const message = document.getElementById('reviewsMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    if (type === 'loading') {
+        spinner.classList.remove('d-none');
+        message.classList.add('d-none');
+        message.textContent = '';
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.className = `alert alert-${type}`;
+    message.textContent = text;
+    message.classList.remove('d-none');
+}
+
+function hideReviewStatus() {
+    const spinner = document.getElementById('reviewsSpinner');
+    const message = document.getElementById('reviewsMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.classList.add('d-none');
+}
+
 function loadUserReviews() {
     const container = document.getElementById('reviewsList');
     if (!container) {
         return;
     }
 
-    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+    showReviewStatus('loading');
+    container.innerHTML = '';
 
     fetch('../api/reviews.php')
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                const warn = document.createElement('div');
-                warn.className = 'alert alert-warning';
-                warn.textContent = data.message || 'Could not load reviews.';
-                container.replaceChildren(warn);
+                showReviewStatus('warning', data.message || 'Could not load reviews.');
                 return;
             }
 
             if (!Array.isArray(data.data) || data.data.length === 0) {
-                container.innerHTML = '<div class="alert alert-info">No reviews found.</div>';
+                showReviewStatus('info', 'No reviews found.');
                 return;
             }
 
+            hideReviewStatus();
             const template = document.getElementById('reviewTemplate');
             container.innerHTML = '';
             data.data.forEach(review => {
+                // Aquí no generamos HTML desde cadenas.
+                // Clonamos el template que ya está definido en views/reviews.php y luego rellenamos los valores.
                 const clone = template.content.cloneNode(true);
                 const item = clone.querySelector('.review-item');
 
@@ -77,7 +109,7 @@ function loadUserReviews() {
         })
         .catch(error => {
             console.error('Error loading reviews:', error);
-            container.innerHTML = '<div class="alert alert-danger">Error loading reviews. Please try again later.</div>';
+            showReviewStatus('danger', 'Error loading reviews. Please try again later.');
         });
 }
 
@@ -108,7 +140,7 @@ function deleteReview(reviewId) {
                     document.getElementById(`review-${reviewId}`)?.remove();
                     const container = document.getElementById('reviewsList');
                     if (container && !container.querySelector('.review-item')) {
-                        container.innerHTML = '<div class="alert alert-info">No reviews found.</div>';
+                        showReviewStatus('info', 'No reviews found.');
                     }
                     Swal.fire('Eliminada', 'La reseña fue eliminada.', 'success');
                 } else {

@@ -43,32 +43,64 @@ window.openUserData = function () {
     }
 }
 
+function showRecommendationsStatus(type, text) {
+    const spinner = document.getElementById('recommendationsSpinner');
+    const message = document.getElementById('recommendationsMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    if (type === 'loading') {
+        spinner.classList.remove('d-none');
+        message.classList.add('d-none');
+        message.textContent = '';
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.className = `alert alert-${type}`;
+    message.textContent = text;
+    message.classList.remove('d-none');
+}
+
+function hideRecommendationsStatus() {
+    const spinner = document.getElementById('recommendationsSpinner');
+    const message = document.getElementById('recommendationsMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.classList.add('d-none');
+}
+
 function loadRecommendations() {
     const container = document.getElementById('recommendationsList');
     if (!container) {
         return;
     }
-    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+
+    showRecommendationsStatus('loading');
+    container.innerHTML = '';
 
     fetch('../api/recommendations.php')
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                const warn = document.createElement('div');
-                warn.className = 'alert alert-warning';
-                warn.textContent = data.message || 'Could not load recommendations.';
-                container.replaceChildren(warn);
+                showRecommendationsStatus('warning', data.message || 'Could not load recommendations.');
                 return;
             }
 
             if (!Array.isArray(data.data) || data.data.length === 0) {
-                container.innerHTML = '<div class="alert alert-info">No recommendations available.</div>';
+                showRecommendationsStatus('info', 'No recommendations available.');
                 return;
             }
 
+            hideRecommendationsStatus();
             const template = document.getElementById('recommendationCardTemplate');
             container.innerHTML = '';
             data.data.forEach(game => {
+                // Clonamos el template de la vista y luego rellenamos sus campos.
                 const clone = template.content.cloneNode(true);
                 const img = clone.querySelector('.game-cover');
                 if (game.portada_url) {
@@ -85,7 +117,7 @@ function loadRecommendations() {
         })
         .catch(error => {
             console.error('Error loading recommendations:', error);
-            container.innerHTML = '<div class="alert alert-danger">Error loading recommendations. Please try again later.</div>';
+            showRecommendationsStatus('danger', 'Error loading recommendations. Please try again later.');
         });
 }
 
@@ -100,28 +132,28 @@ function loadCatalog(search = '') {
         url += '?search=' + encodeURIComponent(search);
     }
 
-    container.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading catalog...</span></div>';
+    showCatalogStatus('loading');
+    container.innerHTML = '';
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                const warnCat = document.createElement('div');
-                warnCat.className = 'alert alert-warning';
-                warnCat.textContent = data.message || 'Could not load the catalog.';
-                container.replaceChildren(warnCat);
+                showCatalogStatus('warning', data.message || 'Could not load the catalog.');
                 return;
             }
 
             const games = Array.isArray(data.data.games) ? data.data.games : [];
             if (games.length === 0) {
-                container.innerHTML = '<div class="alert alert-info">No games found.</div>';
+                showCatalogStatus('info', 'No games found.');
                 return;
             }
 
+            hideCatalogStatus();
             const template = document.getElementById('catalogCardTemplate');
             container.innerHTML = '';
             games.forEach(game => {
+                // Clonamos el template de la vista y luego rellenamos sus campos.
                 const clone = template.content.cloneNode(true);
                 const img = clone.querySelector('.game-cover');
                 if (game.portada_url) {
@@ -137,7 +169,38 @@ function loadCatalog(search = '') {
         })
         .catch(error => {
             console.error('Error loading the catalog:', error);
-            container.innerHTML = '<div class="alert alert-danger">Error loading the catalog. Please try again later.</div>';
+            showCatalogStatus('danger', 'Error loading the catalog. Please try again later.');
         });
+}
+
+function showCatalogStatus(type, text) {
+    const spinner = document.getElementById('catalogSpinner');
+    const message = document.getElementById('catalogMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    if (type === 'loading') {
+        spinner.classList.remove('d-none');
+        message.classList.add('d-none');
+        message.textContent = '';
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.className = `alert alert-${type}`;
+    message.textContent = text;
+    message.classList.remove('d-none');
+}
+
+function hideCatalogStatus() {
+    const spinner = document.getElementById('catalogSpinner');
+    const message = document.getElementById('catalogMessage');
+    if (!spinner || !message) {
+        return;
+    }
+
+    spinner.classList.add('d-none');
+    message.classList.add('d-none');
 }
 
